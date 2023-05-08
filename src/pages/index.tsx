@@ -10,8 +10,8 @@ import {
 } from "lucide-react";
 import { Inter } from "next/font/google";
 import { Button } from "~/components/ui/Button";
-import { Badge } from "~/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import { Badge } from "~/components/ui/Badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/Tabs";
 
 const inter = Inter({ subsets: ["latin"] });
 
