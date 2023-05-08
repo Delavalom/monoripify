@@ -1,6 +1,7 @@
-import { Card, DonutChart, List, ListItem, Title } from "@tremor/react";
+import { Card, List, ListItem } from "@tremor/react";
 import {
   BookMarked,
+  Box,
   ExternalLink,
   FolderGit2,
   GitBranch,
@@ -9,38 +10,13 @@ import {
   MoreVertical,
 } from "lucide-react";
 import { Inter } from "next/font/google";
-import { Button } from "~/components/ui/Button";
+import { Analytics } from "~/components/application/Analytics";
 import { Badge } from "~/components/ui/Badge";
+import { Button } from "~/components/ui/Button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/Tabs";
+import { cities } from "~/data";
 
 const inter = Inter({ subsets: ["latin"] });
-
-const cities = [
-  {
-    name: "New York",
-    sales: 9800,
-  },
-  {
-    name: "London",
-    sales: 4567,
-  },
-  {
-    name: "Hong Kong",
-    sales: 3908,
-  },
-  {
-    name: "San Francisco",
-    sales: 2400,
-  },
-  {
-    name: "Singapore",
-    sales: 1908,
-  },
-  {
-    name: "Zurich",
-    sales: 1398,
-  },
-];
 
 const valueFormatter = (number: number) =>
   `$ ${Intl.NumberFormat("us").format(number).toString()}`;
@@ -84,31 +60,7 @@ export default function Home() {
         </section>
       </header>
       <main className="mx-auto flex w-full max-w-[1000px] flex-col p-10 gap-10">
-        <section className="flex gap-10">
-          {/* build analitycs */}
-          <Card>
-            <Title>Sales</Title>
-            <DonutChart
-              className="mt-6"
-              data={cities}
-              category="sales"
-              index="name"
-              valueFormatter={valueFormatter}
-              colors={["slate", "violet", "indigo", "rose", "cyan", "amber"]}
-            />
-          </Card>
-          <Card>
-            <Title>Sales</Title>
-            <DonutChart
-              className="mt-6"
-              data={cities}
-              category="sales"
-              index="name"
-              valueFormatter={valueFormatter}
-              colors={["slate", "violet", "indigo", "rose", "cyan", "amber"]}
-            />
-          </Card>
-        </section>
+        <Analytics data={cities} valueFormatter={valueFormatter} />
         <section className="w-full">
           {/* tabs */}
           <Tabs defaultValue="apps" className="w-full">
@@ -132,7 +84,6 @@ export default function Home() {
                           <h3 className="text-sm">monoripify.io</h3>
                         </div>
                       </div>
-                      <div>{/* las commit  */}</div>
                       <div className="flex flex-col">
                         <h2 className="text-sm font-bold">
                           Launch new landing page
@@ -158,14 +109,13 @@ export default function Home() {
                     >
                       {/* img name, subtitle  */}
                       <div className="flex items-center gap-4">
-                        <Github className="h-8 w-8 rounded-full border p-6" />
+                        <Box className="h-8 w-8 rounded-full border p-6" />
                         <div className="flex flex-col">
                           <h2 className="font-bold">shared-utils</h2>
                           <h3 className="text-sm">@share-utils</h3>
                         </div>
                       </div>
-                      <div>{/* las commit  */}</div>
-                      <div className="flex flex-col gap-2">
+                      <div className="flex flex-col">
                         <h2 className="text-sm font-bold">
                           Launch new package
                         </h2>
