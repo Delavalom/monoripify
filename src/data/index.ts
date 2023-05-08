@@ -24,3 +24,26 @@ export const cities = [
     sales: 1398,
   },
 ];
+
+export const monorepoData = {
+  apps: [
+    {
+      image: "",
+      name: "Monoripify",
+      domain: "monoripify.io",
+      commit: "Launch new landing page",
+      date: new Date(),
+    },
+  ],
+  packages: [
+    {
+      image: "",
+      name: "shared-utils",
+      moduleName: "@shared-utils",
+      commit: "Launch new package",
+      date: new Date(),
+    },
+  ],
+};
+
+export type MonorepoData = typeof monorepoData
