@@ -8,8 +8,9 @@ const server = z.object({
   //   DATABASE_URL: z.string().url(),
   NODE_ENV: z.enum(["development", "test", "production"]),
   // Add `.min(1) on ID and SECRET if you want to make sure they're not empty
+
   APP_ID: z.string().min(1),
-  APP_SECRET: z.string().min(1),
+  PRIVATE_KEY: z.string().min(1),
   WEBHOOK_SECRET_TOKEN: z.string().min(1),
 });
 
@@ -30,8 +31,9 @@ const client = z.object({
 const processEnv = {
   //   DATABASE_URL: process.env.DATABASE_URL,
   NODE_ENV: process.env.NODE_ENV,
+
   APP_ID: process.env.APP_ID,
-  APP_SECRET: process.env.APP_SECRET,
+  PRIVATE_KEY: process.env.PRIVATE_KEY,
   WEBHOOK_SECRET_TOKEN: process.env.WEBHOOK_SECRET_TOKEN,
 };
 
