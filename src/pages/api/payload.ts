@@ -30,7 +30,7 @@ export default async function handler(
       body.installation.id
     );
 
-    await octokit.request(
+    const dispatches = await octokit.request(
       "POST /repos/{owner}/{repo}/actions/workflows/{workflow_id}/dispatches",
       {
         owner: "Delavalom",
@@ -44,7 +44,7 @@ export default async function handler(
       }
     );
 
-    res.status(200).json({ message: "succeed" });
+    console.log(dispatches.data)
   }
   res.status(400).json({ message: "failed" });
 }

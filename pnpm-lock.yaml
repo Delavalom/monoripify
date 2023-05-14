@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@octokit/auth-token': ^3.0.3
   '@radix-ui/react-avatar': ^1.0.2
   '@radix-ui/react-slot': ^1.0.1
   '@radix-ui/react-tabs': ^1.0.3
@@ -31,6 +32,7 @@ specifiers:
   zod: ^3.21.4
 
 dependencies:
+  '@octokit/auth-token': 3.0.3
   '@radix-ui/react-avatar': 1.0.2_biqbaboplfbrettd7655fr4n2y
   '@radix-ui/react-slot': 1.0.1_react@18.2.0
   '@radix-ui/react-tabs': 1.0.3_biqbaboplfbrettd7655fr4n2y
