@@ -34,7 +34,7 @@ export default async function handler(
       "POST /repos/{owner}/{repo}/actions/workflows/{workflow_id}/dispatches",
       {
         owner: "Delavalom",
-        repo: "my-porfolio-page",
+        repo: "monoripify",
         workflow_id: "build.yml",
         ref: "main",
         inputs: parse(yamlPath),
