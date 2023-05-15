@@ -47,9 +47,10 @@ jobs:
 
     - name: Build
       run: pnpm build
-      env: 
-        app_id: ${{ inputs.app_id }}
-        webhook_secret: ${{ inputs.webhook_secret }}
-        private_key: ${{ inputs.private_key }}
+      env:
+        APP_ID: ${{ inputs.app_id }}
+        WEBHOOK_SECRET: ${{ inputs.webhook_secret }}
+        PRIVATE_KEY: ${{ inputs.private_key }}
+
 
 ...
