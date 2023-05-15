@@ -27,12 +27,12 @@ jobs:
           node-version: [18.x]
 
     steps:
-        
     - uses: actions/checkout@v3
     - name: "Clone user's repo"
       uses: actions/checkout@v3
       with:
-        repository: ${{ github.event.repository }}
+        repository: ${{ github.event.repository.full_name }}
+        ref: ${{ github.event.ref }}
     - uses: pnpm/action-setup@0609f0983b7a228f052f81ef4c3d6510cae254ad
       with:
         version: 6.10.0
@@ -47,5 +47,9 @@ jobs:
 
     - name: Build
       run: pnpm build
+      env: 
+        app_id: ${{ inputs.app_id }}
+        webhook_secret: ${{ inputs.webhook_secret }}
+        private_key: ${{ inputs.private_key }}
 
 ...
