@@ -6,6 +6,15 @@ on:
     inputs: 
       repo: 
         description: "Build desired repo"
+        required: false
+        type: string
+      app_id: 
+        required: true
+        type: string
+      webhook_secret: 
+        required: true
+        type: string
+      private_key: 
         required: true
         type: string
 
@@ -23,7 +32,7 @@ jobs:
     - name: "Clone user's repo"
       uses: actions/checkout@v3
       with:
-        repository: ${{ inputs.repo }}
+        repository: ${{ github.event.repository }}
     - uses: pnpm/action-setup@0609f0983b7a228f052f81ef4c3d6510cae254ad
       with:
         version: 6.10.0

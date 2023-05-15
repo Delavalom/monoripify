@@ -4,15 +4,13 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 import { octokitApp } from "~/server/octokit";
-import { parse } from "yaml";
-import { resolve, join } from "path";
 import type { PushEvent } from "~/types/types";
+import { env } from "~/env.mjs";
 
 type Data = {
   message: string;
 };
 
-const yamlPath = join(resolve(), ".github/worflows/build.yml");
 
 export default async function handler(
   req: NextApiRequest,
@@ -37,7 +35,11 @@ export default async function handler(
         repo: "monoripify",
         workflow_id: "build.yml",
         ref: "main",
-        inputs: {},
+        inputs: {
+          "app_id": env.APP_ID,
+          "webhook_secret": env.WEBHOOK_SECRET_TOKEN,
+          "private_key": env.PRIVATE_KEY
+        },
         headers: {
           "X-GitHub-Api-Version": "2022-11-28",
         },
