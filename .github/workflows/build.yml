@@ -11,7 +11,7 @@ on:
       app_id: 
         required: true
         type: string
-      webhook_secret: 
+      webhook_secret_token: 
         required: true
         type: string
       private_key: 
@@ -49,7 +49,7 @@ jobs:
       run: pnpm build
       env:
         APP_ID: ${{ inputs.app_id }}
-        WEBHOOK_SECRET: ${{ inputs.webhook_secret }}
+        WEBHOOK_SECRET_TOKEN: ${{ inputs.webhook_secret_token }}
         PRIVATE_KEY: ${{ inputs.private_key }}
 
 

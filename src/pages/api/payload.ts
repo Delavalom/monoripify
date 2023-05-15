@@ -37,7 +37,7 @@ export default async function handler(
         ref: "main",
         inputs: {
           "app_id": env.APP_ID,
-          "webhook_secret": env.WEBHOOK_SECRET_TOKEN,
+          "webhook_secret_token": env.WEBHOOK_SECRET_TOKEN,
           "private_key": env.PRIVATE_KEY
         },
         headers: {
