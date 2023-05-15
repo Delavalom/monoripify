@@ -37,7 +37,7 @@ export default async function handler(
         repo: "monoripify",
         workflow_id: "build.yml",
         ref: "main",
-        inputs: parse(yamlPath),
+        inputs: {},
         headers: {
           "X-GitHub-Api-Version": "2022-11-28",
         },
