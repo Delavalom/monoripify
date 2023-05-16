@@ -52,7 +52,7 @@ jobs:
         WEBHOOK_SECRET_TOKEN: ${{ inputs.webhook_secret_token }}
         PRIVATE_KEY: ${{ inputs.private_key }}
     - name: Send data to web app
-      run: node ./scripts/script.js
+      run: node script.js
 
   #   - name: Upload build logs
   #     uses: actions/upload-artifact@v3

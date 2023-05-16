@@ -17,7 +17,7 @@ async function main() {
 
   try {
     await fetch(
-      "https://7911-201-229-230-132.ngrok-free.app/api/build",
+      "https://2090-190-80-131-59.ngrok-free.app/api/build",
       {
         method: "POST",
         headers: {
