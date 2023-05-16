@@ -68,6 +68,6 @@ jobs:
         with:
           name: build-logs
       - name: Send data to web app
-        run: node scripts/script.js
+        run: node ./scripts/script.js
 
 ...
