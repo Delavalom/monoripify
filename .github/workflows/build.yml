@@ -57,6 +57,7 @@ jobs:
       with:
         name: build-logs
         path: build.log
+
   send_build_logs:
     needs: build
     runs-on: ubuntu-latest
@@ -73,6 +74,6 @@ jobs:
           LOGS=$(cat build.log)
       
           curl -X POST -H 'Content-Type: application/json' \
-            -d "{\"build_id\": \"$BUILD_ID\", \"status\": \"$STATUS\", \"logs\": \"$LOGS\"}" http://localhost:3000/api/build
+            -d "{\"build_id\": \"$BUILD_ID\", \"status\": \"$STATUS\", \"logs\": \"$LOGS\"}" https://7911-201-229-230-132.ngrok-free.app/api/build
 
 ...
