@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/require-await */
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function output(
