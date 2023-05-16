@@ -53,7 +53,7 @@ jobs:
         PRIVATE_KEY: ${{ inputs.private_key }}
 
     - name: Upload build logs
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: build-logs
         path: build.log
@@ -62,6 +62,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Download build logs
+        uses: actions/download-artifact@v3
+        with:
+          name: build-logs
       - name: Send data to web app
         run: |
           BUILD_ID=$(date +%s)
