@@ -3,7 +3,7 @@ import path from "path";
 
 const buildId = Date.now();
 const status = "success";
-const logsPath = path.resolve(__dirname, "build.log");
+const logsPath = path.join(path.resolve(), "build.log");
 
 async function main() {
   const logs = await fs.readFile(logsPath, "utf8");
