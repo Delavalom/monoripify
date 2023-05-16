@@ -69,11 +69,40 @@ jobs:
           name: build-logs
       - name: Send data to web app
         run: |
-          BUILD_ID=$(date +%s)
-          STATUS=success
-          LOGS=$(cat build.log)
-      
-          curl -X POST -H 'Content-Type: application/json' \
-            -d "{\"build_id\": \"$BUILD_ID\", \"status\": \"$STATUS\", \"logs\": \"$LOGS\"}" https://7911-201-229-230-132.ngrok-free.app/api/build
+          node -e "const fetch = require('node-fetch');
+          const fs = require('fs/promises')
+          const path = require('path')
+          
+          const buildId = Date.now();
+          const status = 'success';
+          const logsPath = path.resolve(__dirname, "build.log");
+          
+          
+          async function main() {
+            const logs = await fs.readFile(logsPath, "utf8")
+            
+            const payload = {
+              build_id: buildId,
+              status: status,
+              logs: logs
+            };
+            
+            try {
+              const response = await fetch('https://7911-201-229-230-132.ngrok-free.app/api/build', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+          })
+              console.log("succeed")
+            } catch(err) {
+              console.error(err);
+            } finally {
+              console.log("Process finish")
+            }
+          }
+          
+          main()"
 
 ...
