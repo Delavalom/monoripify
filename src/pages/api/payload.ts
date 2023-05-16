@@ -46,7 +46,7 @@ export default async function handler(
       }
     );
 
-    res.status(200).json({ message: "succeed" });
+    return res.status(200).json({ message: "succeed" });
   }
   res.status(400).json({ message: "failed" });
 }

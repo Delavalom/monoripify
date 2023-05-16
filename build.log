@@ -1,0 +1,42 @@
+
+> monoripify@0.1.0 build /Users/luisangel/Documents/builds/monoripify
+> next build
+
+- info Loaded env from /Users/luisangel/Documents/builds/monoripify/.env
+- info Linting and checking validity of types...
+- info Creating an optimized production build...
+- info Using wasm build of next-swc
+- warn Attempted to load @next/swc-darwin-x64, but an error occurred: dlopen(/Users/luisangel/Documents/builds/monoripify/node_modules/.pnpm/@next+swc-darwin-x64@13.4.1/node_modules/@next/swc-darwin-x64/next-swc.darwin-x64.node, 1): no suitable image found.  Did find:
+	/Users/luisangel/Documents/builds/monoripify/node_modules/.pnpm/@next+swc-darwin-x64@13.4.1/node_modules/@next/swc-darwin-x64/next-swc.darwin-x64.node: cannot load 'next-swc.darwin-x64.node' (load command 0x80000034 is unknown)
+	/Users/luisangel/Documents/builds/monoripify/node_modules/.pnpm/@next+swc-darwin-x64@13.4.1/node_modules/@next/swc-darwin-x64/next-swc.darwin-x64.node: cannot load 'next-swc.darwin-x64.node' (load command 0x80000034 is unknown)
+Failed to compile.
+
+src/pages/index.tsx
+An error occured in `next/font`.
+
+Error: Cannot find module 'postcss-import'
+Require stack:
+- /Users/luisangel/Documents/builds/monoripify/node_modules/.pnpm/next@13.4.1_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/build/webpack/config/blocks/css/plugins.js
+- /Users/luisangel/Documents/builds/monoripify/node_modules/.pnpm/next@13.4.1_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/build/webpack/config/blocks/css/index.js
+- /Users/luisangel/Documents/builds/monoripify/node_modules/.pnpm/next@13.4.1_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/build/webpack/config/index.js
+- /Users/luisangel/Documents/builds/monoripify/node_modules/.pnpm/next@13.4.1_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/build/webpack-config.js
+- /Users/luisangel/Documents/builds/monoripify/node_modules/.pnpm/next@13.4.1_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/build/webpack-build/impl.js
+- /Users/luisangel/Documents/builds/monoripify/node_modules/.pnpm/next@13.4.1_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/build/webpack-build/index.js
+- /Users/luisangel/Documents/builds/monoripify/node_modules/.pnpm/next@13.4.1_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/build/index.js
+- /Users/luisangel/Documents/builds/monoripify/node_modules/.pnpm/next@13.4.1_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/cli/next-build.js
+- /Users/luisangel/Documents/builds/monoripify/node_modules/.pnpm/next@13.4.1_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/lib/commands.js
+- /Users/luisangel/Documents/builds/monoripify/node_modules/.pnpm/next@13.4.1_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/bin/next
+    at Function.Module._resolveFilename (node:internal/modules/cjs/loader:933:15)
+    at /Users/luisangel/Documents/builds/monoripify/node_modules/.pnpm/next@13.4.1_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/require-hook.js:180:36
+    at Function.resolve (node:internal/modules/cjs/helpers:108:19)
+    at loadPlugin (/Users/luisangel/Documents/builds/monoripify/node_modules/.pnpm/next@13.4.1_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/build/webpack/config/blocks/css/plugins.js:54:32)
+    at /Users/luisangel/Documents/builds/monoripify/node_modules/.pnpm/next@13.4.1_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/build/webpack/config/blocks/css/plugins.js:162:56
+    at Array.map (<anonymous>)
+    at getPostCssPlugins (/Users/luisangel/Documents/builds/monoripify/node_modules/.pnpm/next@13.4.1_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/build/webpack/config/blocks/css/plugins.js:162:47)
+    at async /Users/luisangel/Documents/builds/monoripify/node_modules/.pnpm/next@13.4.1_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/build/webpack/config/blocks/css/index.js:124:36
+    at async /Users/luisangel/Documents/builds/monoripify/node_modules/.pnpm/next@13.4.1_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/build/webpack/loaders/next-font-loader/index.js:80:34
+    at async Span.traceAsyncFn (/Users/luisangel/Documents/builds/monoripify/node_modules/.pnpm/next@13.4.1_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/trace/trace.js:103:20)
+
+
+> Build failed because of webpack errors
+ ELIFECYCLE  Command failed with exit code 1.

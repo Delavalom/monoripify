@@ -31,7 +31,7 @@ jobs:
     - name: "Clone user's repo"
       uses: actions/checkout@v3
       with:
-        repository: ${{ github.event.repository.full_name }}
+        repository: ${{ github.event.repository.full_name }} # on every repo we need to update env variables
         ref: ${{ github.event.ref }}
     - uses: pnpm/action-setup@0609f0983b7a228f052f81ef4c3d6510cae254ad
       with:
@@ -43,14 +43,32 @@ jobs:
         cache: 'pnpm'
 
     - name: Install Dependencies
-      run: pnpm i
+      run: pnpm i # we need to update user's application command
 
     - name: Build
-      run: pnpm build
+      run: pnpm build > build.log # we need to update user's application command
       env:
         APP_ID: ${{ inputs.app_id }}
         WEBHOOK_SECRET_TOKEN: ${{ inputs.webhook_secret_token }}
         PRIVATE_KEY: ${{ inputs.private_key }}
 
+    - name: Upload build logs
+      uses: actions/upload-artifact@v2
+      with:
+        name: build-logs
+        path: build.log
+  send_build_logs:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send data to web app
+        run: |
+          BUILD_ID=$(date +%s)
+          STATUS=success
+          LOGS=$(cat build.log)
+      
+          curl -X POST -H 'Content-Type: application/json' \
+            -d "{\"build_id\": \"$BUILD_ID\", \"status\": \"$STATUS\", \"logs\": \"$LOGS\"}" http://localhost:3000/api/build
 
 ...
