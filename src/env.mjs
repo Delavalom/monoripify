@@ -8,10 +8,21 @@ const server = z.object({
   //   DATABASE_URL: z.string().url(),
   NODE_ENV: z.enum(["development", "test", "production"]),
   // Add `.min(1) on ID and SECRET if you want to make sure they're not empty
-
+  NEXTAUTH_SECRET:
+    process.env.NODE_ENV === "production"
+      ? z.string().min(1)
+      : z.string().min(1).optional(),
+  NEXTAUTH_URL: z.preprocess(
+    // This makes Vercel deployments not fail if you don't set NEXTAUTH_URL
+    // Since NextAuth.js automatically uses the VERCEL_URL if present.
+    (str) => process.env.VERCEL_URL ?? str,
+    // VERCEL_URL doesn't include `https` so it cant be validated as a URL
+    process.env.VERCEL ? z.string().min(1) : z.string().url()
+  ),
   APP_ID: z.string().min(1),
   PRIVATE_KEY: z.string().min(1),
   WEBHOOK_SECRET_TOKEN: z.string().min(1),
+  CLIENT_SECRET: z.string().min(1)
 });
 
 /**
@@ -20,6 +31,7 @@ const server = z.object({
  */
 const client = z.object({
   //   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().min(1)
+  NEXT_PUBLIC_CLIENT_ID: z.string().min(1)
 });
 
 /**
@@ -31,10 +43,11 @@ const client = z.object({
 const processEnv = {
   //   DATABASE_URL: process.env.DATABASE_URL,
   NODE_ENV: process.env.NODE_ENV,
-
   APP_ID: process.env.APP_ID,
   PRIVATE_KEY: process.env.PRIVATE_KEY,
   WEBHOOK_SECRET_TOKEN: process.env.WEBHOOK_SECRET_TOKEN,
+  NEXT_PUBLIC_CLIENT_ID: process.env.NEXT_PUBLIC_CLIENT_ID,
+  CLIENT_SECRET: process.env.CLIENT_SECRET
 };
 
 // Don't touch the part below

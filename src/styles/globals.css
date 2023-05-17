@@ -79,3 +79,10 @@
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
+
+
+.bg-dots {
+  background: linear-gradient(90deg, #f9fafb 15px, transparent 1%) center,
+    linear-gradient(#f9fafb 15px, transparent 1%) center, rgba(0, 0, 0, 0.24);
+  background-size: 16px 16px;
+}
