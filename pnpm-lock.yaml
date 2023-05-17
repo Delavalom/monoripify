@@ -12,6 +12,7 @@ specifiers:
   '@typescript-eslint/eslint-plugin': ^5.59.2
   '@typescript-eslint/parser': ^5.59.2
   autoprefixer: 10.4.14
+  base-x: ^4.0.0
   class-variance-authority: ^0.6.0
   clsx: ^1.2.1
   eslint: 8.40.0
@@ -36,6 +37,7 @@ dependencies:
   '@radix-ui/react-slot': 1.0.1_react@18.2.0
   '@radix-ui/react-tabs': 1.0.3_biqbaboplfbrettd7655fr4n2y
   '@tremor/react': 2.4.1_biqbaboplfbrettd7655fr4n2y
+  base-x: 4.0.0
   class-variance-authority: 0.6.0_typescript@5.0.4
   clsx: 1.2.1
   lucide-react: 0.214.0_react@18.2.0
@@ -1171,6 +1173,10 @@ packages:
 
   /balanced-match/1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
+
+  /base-x/4.0.0:
+    resolution: {integrity: sha512-FuwxlW4H5kh37X/oW59pwTzzTKRzfrrQwhmyspRM7swOEZcHtDZSCt45U6oKgtuFE+WYPblePMVIPR4RZrh/hw==}
+    dev: false
 
   /before-after-hook/2.2.3:
     resolution: {integrity: sha512-NzUnlZexiaH/46WDhANlyR2bXRopNg4F/zuSA3OpZnllCUgRaOF2znDioDWrmbNVsuZk6l9pMquQB38cfBZwkQ==}
