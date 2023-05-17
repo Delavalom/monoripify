@@ -19,9 +19,11 @@ const server = z.object({
     // VERCEL_URL doesn't include `https` so it cant be validated as a URL
     process.env.VERCEL ? z.string().min(1) : z.string().url()
   ),
+  
   APP_ID: z.string().min(1),
   PRIVATE_KEY: z.string().min(1),
   WEBHOOK_SECRET_TOKEN: z.string().min(1),
+
   CLIENT_SECRET: z.string().min(1)
 });
 
@@ -43,9 +45,13 @@ const client = z.object({
 const processEnv = {
   //   DATABASE_URL: process.env.DATABASE_URL,
   NODE_ENV: process.env.NODE_ENV,
+  NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
+  NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+
   APP_ID: process.env.APP_ID,
   PRIVATE_KEY: process.env.PRIVATE_KEY,
   WEBHOOK_SECRET_TOKEN: process.env.WEBHOOK_SECRET_TOKEN,
+
   NEXT_PUBLIC_CLIENT_ID: process.env.NEXT_PUBLIC_CLIENT_ID,
   CLIENT_SECRET: process.env.CLIENT_SECRET
 };
