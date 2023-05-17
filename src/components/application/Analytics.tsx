@@ -8,10 +8,12 @@ type Data = {
 
 type Props = {
   data: Data[];
-  valueFormatter: (num: number) => string;
 };
 
-export const Analytics: FC<Props> = ({ data, valueFormatter }) => {
+const valueFormatter = (number: number) =>
+  `$ ${Intl.NumberFormat("us").format(number).toString()}`;
+
+export const Analytics: FC<Props> = ({ data }) => {
   return (
     <section className="flex gap-10">
       {/* build analitycs */}
