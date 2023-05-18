@@ -1,6 +1,5 @@
-import { BookMarked, ExternalLink, Lock } from "lucide-react";
-import { FolderGit2 } from "lucide-react";
-import { Github } from "lucide-react";
+import { BookMarked, ExternalLink, FolderGit2, Github, Lock, LogOut } from "lucide-react";
+import { signOut } from "next-auth/react";
 import { type FC } from "react";
 import { Badge } from "./Badge";
 import { Button } from "./Button";
@@ -34,10 +33,13 @@ export const Navbar: FC = () => {
             </ul>
           </nav>
         </div>
-        <div>
+        <div className="flex items-center gap-6">
           <Button variant="outline">
             View on github
             <ExternalLink className="ml-2 h-4 w-4 opacity-70" />
+          </Button>
+          <Button variant="outline" onClick={() => signOut()}>
+            <LogOut />
           </Button>
         </div>
       </section>

@@ -6,6 +6,7 @@ import {
 } from "next-auth";
 import { type DefaultJWT } from "next-auth/jwt";
 import { env } from "~/env.mjs";
+import GithubProvider from 'next-auth/providers/github'
 
 declare module "next-auth" {
   interface Session extends DefaultSession {
@@ -44,12 +45,16 @@ export const authOptions: NextAuthOptions = {
       session.user.id = token.id
       return session
     },
+
   },
   secret: env.NEXTAUTH_SECRET,
-  providers: [],
-  pages: {
-    signIn: "/auth"
-  }
+  providers: [
+    GithubProvider({
+      clientId: env.NEXT_PUBLIC_CLIENT_ID,
+      clientSecret: env.CLIENT_SECRET,
+      
+    })
+  ],
 };
 
 export const getServerAuthSession = (ctx: {
