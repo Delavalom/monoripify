@@ -24,7 +24,10 @@ const server = z.object({
   PRIVATE_KEY: z.string().min(1),
   WEBHOOK_SECRET_TOKEN: z.string().min(1),
 
-  CLIENT_SECRET: z.string().min(1)
+  CLIENT_SECRET: z.string().min(1),
+
+  UPSTASH_URL: z.string().min(1),
+  UPSTASH_TOKEN: z.string().min(1)
 });
 
 /**
@@ -53,7 +56,10 @@ const processEnv = {
   WEBHOOK_SECRET_TOKEN: process.env.WEBHOOK_SECRET_TOKEN,
 
   NEXT_PUBLIC_CLIENT_ID: process.env.NEXT_PUBLIC_CLIENT_ID,
-  CLIENT_SECRET: process.env.CLIENT_SECRET
+  CLIENT_SECRET: process.env.CLIENT_SECRET,
+
+  UPSTASH_URL: process.env.UPSTASH_URL,
+  UPSTASH_TOKEN: process.env.UPSTASH_TOKEN,
 };
 
 // Don't touch the part below
