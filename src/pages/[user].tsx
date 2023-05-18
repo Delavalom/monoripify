@@ -27,6 +27,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "~/components/ui/Popover";
+import { ScrollArea } from "~/components/ui/ScrollArea";
 import { generateId } from "~/lib/base58";
 import { cn } from "~/lib/utils";
 import { redis } from "~/server/redis";
@@ -56,21 +57,20 @@ const repositories = [
 
 export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   const installationId = ctx.query.user;
-  
+
   if (typeof installationId !== "string") return { props: {} };
-  
+
   const user = await redis.get<Schema>(installationId);
 
   ctx.res.setHeader(
-    'Cache-Control',
-    'public, s-maxage=10, stale-while-revalidate=59',
+    "Cache-Control",
+    "public, s-maxage=100, stale-while-revalidate=59"
   );
-  
+
   return {
     props: { user },
   };
-};
-
+}
 
 const initialEnvironments = [
   {
@@ -80,7 +80,7 @@ const initialEnvironments = [
   },
 ];
 
-const Installation: NextPage<{user: Schema | null}> = ({user}) => {
+const Installation: NextPage<{ user: Schema | null }> = ({ user }) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
   const [envVars, setEnvVars] = useState<Required<Schema>["envs"]>(
@@ -161,9 +161,8 @@ const Installation: NextPage<{user: Schema | null}> = ({user}) => {
                       className="w-[200px] justify-between"
                     >
                       {value
-                        ? user?.repositories.find(
-                            (repo) => repo.name === value
-                          )?.name
+                        ? user?.repositories.find((repo) => repo.name === value)
+                            ?.name
                         : "Select repo..."}
                       <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
@@ -172,29 +171,31 @@ const Installation: NextPage<{user: Schema | null}> = ({user}) => {
                     <Command>
                       <CommandInput placeholder="Search repo..." />
                       <CommandEmpty>No repo found.</CommandEmpty>
-                      <CommandGroup>
-                        {user?.repositories.map((repo) => (
-                          <CommandItem
-                            key={repo.url}
-                            onSelect={(currentValue) => {
-                              setValue(
-                                currentValue === value ? "" : currentValue
-                              );
-                              setOpen(false);
-                            }}
-                          >
-                            <Check
-                              className={cn(
-                                "mr-2 h-4 w-4",
-                                value === repo.name
-                                  ? "opacity-100"
-                                  : "opacity-0"
-                              )}
-                            />
-                            {repo.name}
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
+                      <ScrollArea>
+                        <CommandGroup>
+                          {user?.repositories.map((repo) => (
+                            <CommandItem
+                              key={repo.url}
+                              onSelect={(currentValue) => {
+                                setValue(
+                                  currentValue === value ? "" : currentValue
+                                );
+                                setOpen(false);
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  value === repo.name
+                                    ? "opacity-100"
+                                    : "opacity-0"
+                                )}
+                              />
+                              {repo.name}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </ScrollArea>
                     </Command>
                   </PopoverContent>
                 </Popover>
@@ -249,4 +250,3 @@ const Installation: NextPage<{user: Schema | null}> = ({user}) => {
 };
 
 export default Installation;
-
