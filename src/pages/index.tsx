@@ -1,11 +1,9 @@
 import { Frown, Github, Loader2 } from "lucide-react";
 import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
-import { type ReactElement } from "react";
 import { TableComponent } from "~/components/application/Table";
 import { Button } from "~/components/ui/Button";
 import { monorepoData } from "~/data";
-import { env } from "~/env.mjs";
 
 export default function Home() {
   const session = useSession();
@@ -53,11 +51,11 @@ export default function Home() {
   }
 
   return (
-    <main className="mx-auto flex w-full max-w-[1000px] flex-col gap-10 p-10">
+    <>
       <section className="bg-dots flex h-[200px] w-full items-center justify-center rounded-lg border">
         <InitialButton />
       </section>
       <TableComponent data={monorepoData} />
-    </main>
+    </>
   );
 }
