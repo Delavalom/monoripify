@@ -24,5 +24,5 @@ export default async function installation(
 
   await redis.set<Schema>(querys.installation_id, { repositories: accessibleRepos.data.repositories })
 
-  res.redirect("/");
+  res.redirect(`/${querys.installation_id}`);
 }

@@ -201,7 +201,11 @@ declare global {
   export type Schema = {
     repositories: Partial<Repository>[]
     buildId?: string
-    env?: { [key: string]: string }
+    envs?: {
+      id: string,
+      key: string,
+      value: string,
+    }[]
   }
 }
 

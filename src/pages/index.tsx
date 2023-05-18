@@ -51,11 +51,11 @@ export default function Home() {
   }
 
   return (
-    <>
+    <main className="mx-auto flex w-full max-w-[1000px] flex-col gap-10 p-10">
       <section className="bg-dots flex h-[200px] w-full items-center justify-center rounded-lg border">
         <InitialButton />
       </section>
       <TableComponent data={monorepoData} />
-    </>
+    </main>
   );
 }
