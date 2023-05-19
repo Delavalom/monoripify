@@ -15,26 +15,27 @@ export default async function handler(
   res: NextApiResponse<Data>
 ) {
   const event = req.headers["x-github-event"];
+  return res.status(200).json({ message: "succeed" });
 
-  if (event === "push") {
-    try {
-      const body = req.body as PushEvent;
-      const branchName = body.ref.split("/").pop() as string;
-      console.log(
-        `Received push event for repo ${body.repository.name} and branch ${branchName}`
-      );
+  // if (event === "push") {
+  //   try {
+  //     const body = req.body as PushEvent;
+  //     const branchName = body.ref.split("/").pop() as string;
+  //     console.log(
+  //       `Received push event for repo ${body.repository.name} and branch ${branchName}`
+  //     );
 
-      await handlePushEvent(body);
-      return res.status(200).json({ message: "succeed" });
-    } catch (error) {
-      if (error instanceof Error) {
-        console.log(error.message);
-      }
-      return res.status(400).json({ message: "failed" });
-    }
-  }
+  //     await handlePushEvent(body);
+  //     return res.status(200).json({ message: "succeed" });
+  //   } catch (error) {
+  //     if (error instanceof Error) {
+  //       console.log(error.message);
+  //     }
+  //     return res.status(400).json({ message: "failed" });
+  //   }
+  // }
 
-  return res.status(500).json({ message: "server error" });
+  // return res.status(500).json({ message: "server error" });
 }
 
 
