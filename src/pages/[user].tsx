@@ -1,7 +1,6 @@
 import { Check, ChevronsUpDown, Plus, Trash } from "lucide-react";
 import { GetServerSidePropsContext, type NextPage } from "next";
 import { useRouter } from "next/router";
-import { type ParsedUrlQuery } from "querystring";
 import { ChangeEvent, MouseEvent, useState } from "react";
 import { Button } from "~/components/ui/Button";
 import {
@@ -86,8 +85,13 @@ const Installation: NextPage<{ user: Schema | null }> = ({ user }) => {
   const [envVars, setEnvVars] = useState<Required<Schema>["envs"]>(
     user?.envs ?? initialEnvironments
   );
+  const [submitData, setSubmitData] = useState()
 
   const router = useRouter();
+
+  const handleSubmit = () => {
+
+  }
 
   const handleAddEnv = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -171,10 +175,11 @@ const Installation: NextPage<{ user: Schema | null }> = ({ user }) => {
                     <Command>
                       <CommandInput placeholder="Search repo..." />
                       <CommandEmpty>No repo found.</CommandEmpty>
-                      <ScrollArea>
-                        <CommandGroup>
+                      <CommandGroup>
+                        <ScrollArea className="h-80">
                           {user?.repositories.map((repo) => (
                             <CommandItem
+                              className="cursor-pointer"
                               key={repo.url}
                               onSelect={(currentValue) => {
                                 setValue(
@@ -194,8 +199,8 @@ const Installation: NextPage<{ user: Schema | null }> = ({ user }) => {
                               {repo.name}
                             </CommandItem>
                           ))}
-                        </CommandGroup>
-                      </ScrollArea>
+                        </ScrollArea>
+                      </CommandGroup>
                     </Command>
                   </PopoverContent>
                 </Popover>

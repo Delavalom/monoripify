@@ -4,17 +4,14 @@ name: Build
 on:
   workflow_dispatch: 
     inputs: 
-      repo: 
+      installation_id:
+        description: "required for build"
+        type: string
+      repo_fullname: 
         description: "Build desired repo"
-        required: false
-        type: string
-      app_id: 
         required: true
         type: string
-      webhook_secret_token: 
-        required: true
-        type: string
-      private_key: 
+      envs: 
         required: true
         type: string
 
@@ -31,7 +28,7 @@ jobs:
     - name: "Clone user's repo"
       uses: actions/checkout@v3
       with:
-        repository: ${{ github.event.repository.full_name }} # on every repo we need to update env variables
+        repository: ${{ inputs.repo_fullname }} # on every repo we need to update env variables
         ref: ${{ github.event.ref }}
     - uses: pnpm/action-setup@0609f0983b7a228f052f81ef4c3d6510cae254ad
       with:
@@ -46,11 +43,8 @@ jobs:
       run: pnpm i # we need to update user's application command
 
     - name: Build
-      run: pnpm build > build.log # we need to update user's application command
-      env:
-        APP_ID: ${{ inputs.app_id }}
-        WEBHOOK_SECRET_TOKEN: ${{ inputs.webhook_secret_token }}
-        PRIVATE_KEY: ${{ inputs.private_key }}
+      run: ${{ inputs.envs }} pnpm build > build.log # we need to update user's application command
+
     - name: Send data to web app
       run: node script.mjs --experimental-fetch
 
