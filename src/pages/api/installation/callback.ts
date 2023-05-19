@@ -12,8 +12,15 @@ export default async function installation(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+
   const querys = req.query as Query;
 
+  const hasInstallationId = await redis.get<Schema>(querys.installation_id)
+
+  if (hasInstallationId) {
+    return res.redirect(`/${querys.installation_id}`);
+  }
+  
   const octokit = await octokitApp.getInstallationOctokit(
     parseInt(querys.installation_id, 10)
   );

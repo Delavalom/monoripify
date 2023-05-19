@@ -2,6 +2,7 @@ import { Check, ChevronsUpDown, Plus, Trash } from "lucide-react";
 import { GetServerSidePropsContext, type NextPage } from "next";
 import { useRouter } from "next/router";
 import { ChangeEvent, MouseEvent, useState } from "react";
+import { useMutation } from "react-query";
 import { Button } from "~/components/ui/Button";
 import {
   Card,
@@ -71,27 +72,38 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   };
 }
 
-const initialEnvironments = [
-  {
-    id: generateId(),
-    key: "",
-    value: "",
-  },
-];
+type SubmitData = {
+  installationId: string;
+  repository: string;
+  envs: {
+    id: string;
+    key: string;
+    value: string;
+  }[];
+};
 
 const Installation: NextPage<{ user: Schema | null }> = ({ user }) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
   const [envVars, setEnvVars] = useState<Required<Schema>["envs"]>(
-    user?.envs ?? initialEnvironments
+    user?.envs ?? []
   );
-  const [submitData, setSubmitData] = useState()
-
   const router = useRouter();
 
-  const handleSubmit = () => {
-
-  }
+  const { mutate } = useMutation(() => {
+    return fetch("/api/build", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-initial-build": "true"
+      },
+      body: JSON.stringify({
+        installationId: router.query.user,
+        repository: value,
+        envs: envVars
+      })
+    })
+  })
 
   const handleAddEnv = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -152,7 +164,9 @@ const Installation: NextPage<{ user: Schema | null }> = ({ user }) => {
           <form>
             <div className="grid w-full items-center gap-4">
               <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="name">User ID {router.query.user}</Label>
+                <Label htmlFor="name">
+                  User ID {router.query.user}
+                </Label>
               </div>
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="name">Repositories</Label>
@@ -219,6 +233,7 @@ const Installation: NextPage<{ user: Schema | null }> = ({ user }) => {
                       <Input
                         name="value"
                         placeholder="value..."
+                        type="password"
                         value={env.value}
                         onChange={(e) => handleUpdateEnv(e, env.id)}
                       />
@@ -247,7 +262,13 @@ const Installation: NextPage<{ user: Schema | null }> = ({ user }) => {
           </form>
         </CardContent>
         <CardFooter className="flex justify-between">
-          <Button className="w-full">Build</Button>
+          <Button
+            type="submit"
+            className="w-full"
+            onClick={() => mutate()}
+          >
+            Build
+          </Button>
         </CardFooter>
       </Card>
     </section>
