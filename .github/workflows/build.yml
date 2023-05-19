@@ -5,10 +5,10 @@ on:
   workflow_dispatch: 
     inputs: 
       installation_id:
-        description: "required for build"
+        description: "Installation ID required for build"
         type: string
       repo_fullname: 
-        description: "Build desired repo"
+        description: "Repo full name"
         required: true
         type: string
       envs: 
