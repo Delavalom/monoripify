@@ -6,14 +6,10 @@ export default async function output(
   req: NextApiRequest,
   res: NextApiResponse<{message: string}>
 ) {
-  console.log(req.body);
-
   const isInitialBuild = req.headers["x-initial-build"];
 
-  console.log(isInitialBuild);
-
   if (isInitialBuild === "true") {
-    try {2
+    try {
       handleInitialBuild(req.body);
       return res.status(200).json({ message: "succeed" });
     } catch (error) {
@@ -24,7 +20,7 @@ export default async function output(
     }
   }
 
-  res.status(200).end("succeed");
+  res.status(400).end("is not initial build");
 }
 
 async function handleInitialBuild(
