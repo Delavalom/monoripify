@@ -198,7 +198,7 @@ export type Committer = {
 // Redis Schema Value
 
 declare global {
-  export type Schema = {
+  type Schema = {
     repositories: Partial<CustomRepoSchema>[];
     buildId?: string;
     envs?: {
@@ -226,6 +226,16 @@ declare global {
     url: string;
     default_branch: string;
     permissions: Partial<Permissions>;
+  };
+
+  type SubmitData = {
+    installationId: string;
+    repoFullname: string;
+    envs: {
+      id: string;
+      key: string;
+      value: string;
+    }[];
   };
 }
 

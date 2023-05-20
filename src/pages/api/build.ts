@@ -13,7 +13,7 @@ export default async function output(
   console.log(isInitialBuild);
 
   if (isInitialBuild === "true") {
-    try {
+    try {2
       handleInitialBuild(req.body);
       return res.status(200).json({ message: "succeed" });
     } catch (error) {
@@ -28,7 +28,7 @@ export default async function output(
 }
 
 async function handleInitialBuild(
-  payload: Schema & { installationId: string; repoFullname: string }
+  payload: SubmitData
 ) {
   const octokit = await octokitApp.getInstallationOctokit(
     parseInt(payload.installationId, 10)
@@ -55,7 +55,7 @@ async function handleInitialBuild(
       ref: "main",
       inputs: {
         installation_id: payload.installationId,
-        repo: payload.repoFullname,
+        repo_fullname: payload.repoFullname,
         envs,
       },
       headers: {

@@ -72,19 +72,14 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   };
 }
 
-type SubmitData = {
-  installationId: string;
-  repository: string;
-  envs: {
-    id: string;
-    key: string;
-    value: string;
-  }[];
-};
+
 
 const Installation: NextPage<{ user: Schema | null }> = ({ user }) => {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState({
+    name: "",
+    fullName: ""
+  });
   const [envVars, setEnvVars] = useState<Required<Schema>["envs"]>(
     user?.envs ?? []
   );
@@ -99,9 +94,9 @@ const Installation: NextPage<{ user: Schema | null }> = ({ user }) => {
       },
       body: JSON.stringify({
         installationId: router.query.user,
-        repository: value,
+        repoFullname: value.fullName,
         envs: envVars
-      })
+      } as SubmitData)
     })
   })
 
@@ -179,7 +174,7 @@ const Installation: NextPage<{ user: Schema | null }> = ({ user }) => {
                       className="w-[200px] justify-between"
                     >
                       {value
-                        ? user?.repositories.find((repo) => repo.name === value)
+                        ? user?.repositories.find((repo) => repo.name === value.name)
                             ?.name
                         : "Select repo..."}
                       <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -196,16 +191,17 @@ const Installation: NextPage<{ user: Schema | null }> = ({ user }) => {
                               className="cursor-pointer"
                               key={repo.url}
                               onSelect={(currentValue) => {
-                                setValue(
-                                  currentValue === value ? "" : currentValue
-                                );
+                                setValue({
+                                  name: currentValue === value.name ? "" : currentValue,
+                                  fullName: repo.full_name!
+                              });
                                 setOpen(false);
                               }}
                             >
                               <Check
                                 className={cn(
                                   "mr-2 h-4 w-4",
-                                  value === repo.name
+                                  value.name === repo.name
                                     ? "opacity-100"
                                     : "opacity-0"
                                 )}
