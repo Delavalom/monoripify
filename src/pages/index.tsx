@@ -18,7 +18,7 @@ export default function Home() {
         asChild
       >
         <Link
-            href={`https://github.com/apps/monoripify/installations/new`}
+            href={`https://github.com/apps/monoripify/installations/new/permissions?target_id=${session.data.user.id}`}
             className="gap-4 border"
           >
         <Frown />

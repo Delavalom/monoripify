@@ -1,6 +1,6 @@
 import { generateId } from "~/lib/base58";
 
-type Action =
+export type Action =
   | {
       type: "add";
     }

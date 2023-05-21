@@ -1,36 +1,10 @@
-import { Check, ChevronsUpDown, Loader2, Plus, Trash } from "lucide-react";
 import { GetServerSidePropsContext, type NextPage } from "next";
 import { useRouter } from "next/router";
-import { ChangeEvent, MouseEvent, useReducer, useState } from "react";
+import { useReducer, useState } from "react";
 import { useMutation } from "react-query";
-import { Button } from "~/components/ui/Button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/Card";
-import { Checkbox } from "~/components/ui/Checkbox";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "~/components/ui/Command";
-import { Input } from "~/components/ui/Input";
-import { Label } from "~/components/ui/Label";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "~/components/ui/Popover";
-import { ScrollArea } from "~/components/ui/ScrollArea";
+import { BuildForm } from "~/components/application/BuildForm";
 import { envsReducer } from "~/context/envs/dispatch";
-import { generateId } from "~/lib/base58";
-import { cn } from "~/lib/utils";
+import { EnvContext, EnvDispatchContext } from "~/context/envs/dispatchContext";
 import { redis } from "~/server/redis";
 
 export async function getServerSideProps(ctx: GetServerSidePropsContext) {
@@ -51,7 +25,6 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
 }
 
 const Installation: NextPage<{ user: Schema | null }> = ({ user }) => {
-  const [open, setOpen] = useState(false);
   const [value, setValue] = useState({
     name: "",
     fullName: "",
@@ -76,36 +49,26 @@ const Installation: NextPage<{ user: Schema | null }> = ({ user }) => {
       });
     },
     {
-      onSuccess() {},
+      onSuccess() {
+        setIsBuilding(true)
+      },
     }
   );
 
-  const handleAddEnv = (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    dispatch({ type: "add" });
-  };
-
-  const handleDeleteEnv = (e: MouseEvent<SVGElement>, id: string) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    dispatch({ type: "delete", payload: { id } });
-  };
-
-  const handleUpdateEnv = (e: ChangeEvent<HTMLInputElement>, id: string) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    dispatch({
-      type: "update",
-      payload: { id, [e.target.name as "key" | "value"]: e.target.value },
-    });
-  };
-
   return (
-    <section className="mt-10 flex h-full w-full flex-col items-center justify-center"></section>
+    <EnvContext.Provider value={envVars}>
+      <EnvDispatchContext.Provider value={dispatch}>
+        <section className="mt-10 flex h-full w-full flex-col items-center justify-center">
+          <BuildForm
+            isLoading={isLoading}
+            mutate={mutate}
+            setValue={setValue}
+            value={value}
+            user={user}
+          />
+        </section>
+      </EnvDispatchContext.Provider>
+    </EnvContext.Provider>
   );
 };
 

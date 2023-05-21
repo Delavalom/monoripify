@@ -1,11 +1,18 @@
+import { Check, ChevronsUpDown, Loader2, Plus, Trash } from "lucide-react";
+import { useRouter } from "next/router";
 import {
-  useState,
-  type FC,
-  MouseEvent,
   ChangeEvent,
   Dispatch,
+  MouseEvent,
   SetStateAction,
+  useContext,
+  useState,
+  type FC,
 } from "react";
+import { UseMutateFunction } from "react-query";
+import { EnvContext, EnvDispatchContext } from "~/context/envs/dispatchContext";
+import { cn } from "~/lib/utils";
+import { Button } from "../ui/Button";
 import {
   Card,
   CardContent,
@@ -14,11 +21,7 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/Card";
-import { Label } from "../ui/Label";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/Popover";
-import { Button } from "../ui/Button";
-import { useRouter } from "next/router";
-import { ChevronsUpDown, Trash } from "lucide-react";
+import { Checkbox } from "../ui/Checkbox";
 import {
   Command,
   CommandEmpty,
@@ -26,14 +29,10 @@ import {
   CommandInput,
   CommandItem,
 } from "../ui/Command";
-import { ScrollArea } from "../ui/ScrollArea";
-import { Check } from "lucide-react";
 import { Input } from "../ui/Input";
-import { Plus } from "lucide-react";
-import { Checkbox } from "../ui/Checkbox";
-import { Loader2 } from "lucide-react";
-import { cn } from "~/lib/utils";
-import { UseMutateFunction } from "react-query";
+import { Label } from "../ui/Label";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/Popover";
+import { ScrollArea } from "../ui/ScrollArea";
 
 type Props = {
   user: Schema | null;
@@ -45,10 +44,6 @@ type Props = {
     }>
   >;
   isLoading: boolean;
-  envVars: Required<Schema>["envs"];
-  handleAddEnv: (e: MouseEvent<HTMLButtonElement>) => void;
-  handleUpdateEnv: (e: ChangeEvent<HTMLInputElement>, id: string) => void;
-  handleDeleteEnv: (e: MouseEvent<SVGElement>, id: string) => void;
   mutate: UseMutateFunction<Response, unknown, void, unknown>;
 };
 
@@ -57,14 +52,40 @@ export const BuildForm: FC<Props> = ({
   value,
   setValue,
   isLoading,
-  envVars,
-  handleAddEnv,
-  handleUpdateEnv,
-  handleDeleteEnv,
   mutate,
 }) => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
+  const envVars = useContext(EnvContext);
+  const dispatch = useContext(EnvDispatchContext);
+
+  if (!dispatch) {
+    return <></>;
+  }
+
+  const handleAddEnv = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    dispatch({ type: "add" });
+  };
+
+  const handleDeleteEnv = (e: MouseEvent<SVGElement>, id: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    dispatch({ type: "delete", payload: { id } });
+  };
+
+  const handleUpdateEnv = (e: ChangeEvent<HTMLInputElement>, id: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    dispatch({
+      type: "update",
+      payload: { id, [e.target.name as "key" | "value"]: e.target.value },
+    });
+  };
 
   return (
     <Card className="w-[350px]">
@@ -139,7 +160,7 @@ export const BuildForm: FC<Props> = ({
             <div>
               <Label htmlFor="envs">Environment Variables</Label>
               <ul className="flex flex-col gap-2">
-                {envVars.map((env) => (
+                {envVars?.map((env) => (
                   <li className="flex items-center gap-2" key={env.id}>
                     <Input
                       name="key"
