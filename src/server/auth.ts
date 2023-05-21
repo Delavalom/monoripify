@@ -1,8 +1,8 @@
 import { type GetServerSidePropsContext } from "next";
 import {
-  DefaultUser,
   getServerSession,
   type DefaultSession,
+  type DefaultUser,
   type NextAuthOptions,
 } from "next-auth";
 import { type DefaultJWT } from "next-auth/jwt";

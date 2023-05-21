@@ -1,20 +1,18 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { getToken } from "next-auth/jwt";
+import { getInstallationId } from "~/lib/getInstallationId";
 import { octokitApp } from "~/server/octokit";
 
-type Query = {
-  code: string;
-  installation_id: string;
-  setup_action: string;
-};
 
 export default async function handleRepositories(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const querys = req.query as Query;
+
+  const installationId = await getInstallationId(req, res)
 
   const octokit = await octokitApp.getInstallationOctokit(
-    parseInt(querys.installation_id, 10)
+    installationId
   );
 
   const accessibleRepos = await octokit.request(

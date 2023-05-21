@@ -35,7 +35,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/Popover";
 import { ScrollArea } from "../ui/ScrollArea";
 
 type Props = {
-  user: Schema | null;
+  repositories: Partial<CustomRepoSchema>[] | undefined;
   value: { name: string; fullName: string };
   setValue: Dispatch<
     SetStateAction<{
@@ -48,7 +48,7 @@ type Props = {
 };
 
 export const BuildForm: FC<Props> = ({
-  user,
+  repositories,
   value,
   setValue,
   isLoading,
@@ -103,59 +103,62 @@ export const BuildForm: FC<Props> = ({
             </div>
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="name">Repositories</Label>
-              <Popover open={open} onOpenChange={setOpen}>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    role="combobox"
-                    aria-expanded={open}
-                    className="w-[200px] justify-between"
-                  >
-                    {value
-                      ? user?.repositories.find(
-                          (repo) => repo.name === value.name
-                        )?.name
-                      : "Select repo..."}
-                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-[200px] p-0">
-                  <Command>
-                    <CommandInput placeholder="Search repo..." />
-                    <CommandEmpty>No repo found.</CommandEmpty>
-                    <CommandGroup>
-                      <ScrollArea className="h-80">
-                        {user?.repositories.map((repo) => (
-                          <CommandItem
-                            className="cursor-pointer"
-                            key={repo.url}
-                            onSelect={(currentValue) => {
-                              setValue({
-                                name:
-                                  currentValue === value.name
-                                    ? ""
-                                    : currentValue,
-                                fullName: repo.full_name!,
-                              });
-                              setOpen(false);
-                            }}
-                          >
-                            <Check
-                              className={cn(
-                                "mr-2 h-4 w-4",
-                                value.name === repo.name
-                                  ? "opacity-100"
-                                  : "opacity-0"
-                              )}
-                            />
-                            {repo.name}
-                          </CommandItem>
-                        ))}
-                      </ScrollArea>
-                    </CommandGroup>
-                  </Command>
-                </PopoverContent>
-              </Popover>
+              {typeof repositories === "undefined" ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <Popover open={open} onOpenChange={setOpen}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      aria-expanded={open}
+                      className="w-[200px] justify-between"
+                    >
+                      {value
+                        ? repositories.find((repo) => repo.name === value.name)
+                            ?.name
+                        : "Select repo..."}
+                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[200px] p-0">
+                    <Command>
+                      <CommandInput placeholder="Search repo..." />
+                      <CommandEmpty>No repo found.</CommandEmpty>
+                      <CommandGroup>
+                        <ScrollArea className="h-80">
+                          {repositories.map((repo) => (
+                            <CommandItem
+                              className="cursor-pointer"
+                              key={repo.url}
+                              onSelect={(currentValue) => {
+                                setValue({
+                                  name:
+                                    currentValue === value.name
+                                      ? ""
+                                      : currentValue,
+                                  fullName: repo.full_name!,
+                                });
+                                setOpen(false);
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  value.name === repo.name
+                                    ? "opacity-100"
+                                    : "opacity-0"
+                                )}
+                              />
+                              {repo.name}
+                            </CommandItem>
+                          ))}
+                        </ScrollArea>
+                      </CommandGroup>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+              )}
             </div>
             <div>
               <Label htmlFor="envs">Environment Variables</Label>

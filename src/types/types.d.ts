@@ -229,7 +229,6 @@ declare global {
   };
 
   type SubmitData = {
-    installationId: string;
     repoFullname: string;
     envs: {
       id: string;
