@@ -2,6 +2,7 @@ import { GetServerSidePropsContext, type NextPage } from "next";
 import { useRouter } from "next/router";
 import { useReducer, useState } from "react";
 import { useMutation, useQuery } from "react-query";
+import { Analytics } from "~/components/application/Analytics";
 import { BuildForm } from "~/components/application/BuildForm";
 import { envsReducer } from "~/context/envs/dispatch";
 import { EnvContext, EnvDispatchContext } from "~/context/envs/dispatchContext";
@@ -45,6 +46,12 @@ const Installation: NextPage = () => {
     <EnvContext.Provider value={envVars}>
       <EnvDispatchContext.Provider value={dispatch}>
         <section className="mt-10 flex h-full w-full flex-col items-center justify-center">
+        {isBuilding ? (
+              <section className="bg-dots flex h-[200px] w-full items-center justify-center rounded-lg border">
+                <Analytics data={[]} />
+              </section>
+        ) : (
+          
           <BuildForm
             isLoading={isLoading}
             mutate={mutate}
@@ -52,6 +59,7 @@ const Installation: NextPage = () => {
             value={value}
             repositories={repositories?.data}
           />
+        )}
         </section>
       </EnvDispatchContext.Provider>
     </EnvContext.Provider>
