@@ -45,7 +45,7 @@ const Installation: NextPage = () => {
   return (
     <EnvContext.Provider value={envVars}>
       <EnvDispatchContext.Provider value={dispatch}>
-        <section className="mt-10 flex h-full w-full flex-col items-center justify-center">
+        <section className="mt-10 flex h-full w-full max-w-[1000px] mx-auto flex-col items-center justify-center">
         {isBuilding ? (
               <section className="bg-dots flex h-[200px] w-full items-center justify-center rounded-lg border">
                 <Analytics data={[]} />

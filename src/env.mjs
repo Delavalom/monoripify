@@ -24,10 +24,7 @@ const server = z.object({
   PRIVATE_KEY: z.string().min(1),
   WEBHOOK_SECRET_TOKEN: z.string().min(1),
 
-  CLIENT_SECRET: z.string().min(1),
-
-  UPSTASH_URL: z.string().min(1),
-  UPSTASH_TOKEN: z.string().min(1)
+  GITHUB_APP_CLIENT_SECRET: z.string().min(1),
 });
 
 /**
@@ -36,7 +33,7 @@ const server = z.object({
  */
 const client = z.object({
   //   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().min(1)
-  NEXT_PUBLIC_CLIENT_ID: z.string().min(1)
+  NEXT_PUBLIC_GITHUB_APP_CLIENT_ID: z.string().min(1)
 });
 
 /**
@@ -55,11 +52,8 @@ const processEnv = {
   PRIVATE_KEY: process.env.PRIVATE_KEY,
   WEBHOOK_SECRET_TOKEN: process.env.WEBHOOK_SECRET_TOKEN,
 
-  NEXT_PUBLIC_CLIENT_ID: process.env.NEXT_PUBLIC_CLIENT_ID,
-  CLIENT_SECRET: process.env.CLIENT_SECRET,
-
-  UPSTASH_URL: process.env.UPSTASH_URL,
-  UPSTASH_TOKEN: process.env.UPSTASH_TOKEN,
+  NEXT_PUBLIC_GITHUB_APP_CLIENT_ID: process.env.NEXT_PUBLIC_GITHUB_APP_CLIENT_ID,
+  GITHUB_APP_CLIENT_SECRET: process.env.GITHUB_APP_CLIENT_SECRET,
 };
 
 // Don't touch the part below
