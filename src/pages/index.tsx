@@ -12,17 +12,13 @@ export default function Home() {
 
   if (session.status === "authenticated") {
     InitialButton = () => (
-      <Button
-        variant="secondary"
-        className="gap-4 border"
-        asChild
-      >
+      <Button variant="secondary" className="gap-4 border" asChild>
         <Link
-            href={`https://github.com/apps/monoripify/installations/new/permissions?target_id=${session.data.user.id}`}
-            className="gap-4 border"
-          >
-        <Frown />
-        Click to install the Github App
+          href={`https://github.com/apps/monoripify/installations/new/permissions?target_id=${session.data.user.id}`}
+          className="gap-4 border"
+        >
+          <Frown />
+          Click to install the Github App
         </Link>
       </Button>
     );

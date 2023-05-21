@@ -50,7 +50,7 @@ const Installation: NextPage<{ user: Schema | null }> = ({ user }) => {
     },
     {
       onSuccess() {
-        setIsBuilding(true)
+        setIsBuilding(true);
       },
     }
   );

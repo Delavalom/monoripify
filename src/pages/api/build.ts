@@ -1,31 +1,47 @@
 /* eslint-disable @typescript-eslint/require-await */
 import type { NextApiRequest, NextApiResponse } from "next";
+import { getToken } from "next-auth/jwt";
 import { octokitApp } from "~/server/octokit";
 
 export default async function output(
   req: NextApiRequest,
-  res: NextApiResponse<{message: string}>
+  res: NextApiResponse<{ message: string }>
 ) {
-  const isInitialBuild = req.headers["x-initial-build"];
+  const token = await getToken({ req });
 
-  if (isInitialBuild === "true") {
-    try {
-      handleInitialBuild(req.body);
-      return res.status(200).json({ message: "succeed" });
-    } catch (error) {
-      if (error instanceof Error) {
-        console.log(error.message);
-      }
-      return res.status(400).json({ message: "failed" });
-    }
+  if (!token) {
+    return res.status(402).json({ message: "unathorized" });
   }
 
-  res.status(400).end("is not initial build");
+  const installationDetails = await octokitApp.octokit.request(
+    "GET /users/{username}/installation",
+    {
+      username: token?.username,
+    }
+  );
+
+  console.log();
+
+  return res.status(200).json({ message: "succeed" });
+
+  // const isInitialBuild = req.headers["x-initial-build"];
+
+  // if (isInitialBuild === "true") {
+  //   try {
+  //     handleInitialBuild(req.body);
+  //     return res.status(200).json({ message: "succeed" });
+  //   } catch (error) {
+  //     if (error instanceof Error) {
+  //       console.log(error.message);
+  //     }
+  //     return res.status(400).json({ message: "failed" });
+  //   }
+  // }
+
+  // res.status(400).end("is not initial build");
 }
 
-async function handleInitialBuild(
-  payload: SubmitData
-) {
+async function handleInitialBuild(payload: SubmitData) {
   const octokit = await octokitApp.getInstallationOctokit(
     parseInt(payload.installationId, 10)
   );

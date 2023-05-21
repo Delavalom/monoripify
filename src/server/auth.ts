@@ -1,28 +1,34 @@
 import { type GetServerSidePropsContext } from "next";
 import {
+  DefaultUser,
   getServerSession,
   type DefaultSession,
   type NextAuthOptions,
 } from "next-auth";
 import { type DefaultJWT } from "next-auth/jwt";
-import { env } from "~/env.mjs";
 import GithubProvider from "next-auth/providers/github";
+import { env } from "~/env.mjs";
 
 declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
       id: string;
-      name: string
+      name: string;
     };
-    accessToken: string
+    accessToken: string;
+    username: string;
+  }
+  interface User extends DefaultUser {
+    username: string;
   }
 }
 
 declare module "next-auth/jwt" {
   interface JWT extends DefaultJWT {
-    id: string
-    accessToken: string
-    installationId?: string 
+    id: string;
+    accessToken: string;
+    installationId?: string;
+    username: string;
   }
 }
 
@@ -36,12 +42,14 @@ export const authOptions: NextAuthOptions = {
       if (account && account.access_token) {
         token.accessToken = account.access_token;
         token.id = user.id;
+        token.username = user.username;
       }
       return token;
     },
     session({ session, token }) {
       session.accessToken = token.accessToken;
       session.user.id = token.id;
+      session.username = token.username;
 
       return session;
     },
@@ -51,6 +59,15 @@ export const authOptions: NextAuthOptions = {
     GithubProvider({
       clientId: env.NEXT_PUBLIC_CLIENT_ID,
       clientSecret: env.CLIENT_SECRET,
+      profile(profile) {
+        return {
+          id: profile.id.toString(),
+          name: profile.name,
+          username: profile.login,
+          email: profile.email,
+          image: profile.avatar_url,
+        };
+      },
     }),
   ],
   events: {

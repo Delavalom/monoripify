@@ -23,5 +23,5 @@ export default async function installation(
 
   console.log(token);
 
-  res.redirect(`/${token.id}`);
+  res.redirect(`/${token.username}`);
 }
