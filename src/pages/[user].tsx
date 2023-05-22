@@ -1,9 +1,9 @@
-import { GetServerSidePropsContext, type NextPage } from "next";
+import { type NextPage } from "next";
 import { useRouter } from "next/router";
 import { useReducer, useState } from "react";
 import { useMutation, useQuery } from "react-query";
-import { Analytics } from "~/components/application/Analytics";
 import { BuildForm } from "~/components/application/BuildForm";
+import { Counter } from "~/components/application/Counter";
 import { envsReducer } from "~/context/envs/dispatch";
 import { EnvContext, EnvDispatchContext } from "~/context/envs/dispatchContext";
 import { fetchRepositories } from "~/lib/fetchRepositories";
@@ -45,21 +45,21 @@ const Installation: NextPage = () => {
   return (
     <EnvContext.Provider value={envVars}>
       <EnvDispatchContext.Provider value={dispatch}>
-        <section className="mt-10 flex h-full w-full max-w-[1000px] mx-auto flex-col items-center justify-center">
-        {isBuilding ? (
-              <section className="bg-dots flex h-[200px] w-full items-center justify-center rounded-lg border">
-                <Analytics data={[]} />
-              </section>
-        ) : (
-          
-          <BuildForm
-            isLoading={isLoading}
-            mutate={mutate}
-            setValue={setValue}
-            value={value}
-            repositories={repositories?.data}
-          />
-        )}
+        <section className="mx-auto mt-10 flex h-full w-full max-w-[1000px] flex-col items-center justify-center">
+          {true ? (
+            <section className="bg-dots h-fit w-full rounded-lg border px-8 py-10">
+              <Counter />
+              {/* <Analytics efficiency_score={80} insights={[]} /> */}
+            </section>
+          ) : (
+            <BuildForm
+              isLoading={isLoading}
+              mutate={mutate}
+              setValue={setValue}
+              value={value}
+              repositories={repositories?.data}
+            />
+          )}
         </section>
       </EnvDispatchContext.Provider>
     </EnvContext.Provider>

@@ -1,15 +1,15 @@
 import { Check, ChevronsUpDown, Loader2, Plus, Trash } from "lucide-react";
 import { useRouter } from "next/router";
 import {
-  ChangeEvent,
-  Dispatch,
-  MouseEvent,
-  SetStateAction,
   useContext,
   useState,
+  type ChangeEvent,
+  type Dispatch,
   type FC,
+  type MouseEvent,
+  type SetStateAction,
 } from "react";
-import { UseMutateFunction } from "react-query";
+import { type UseMutateFunction } from "react-query";
 import { EnvContext, EnvDispatchContext } from "~/context/envs/dispatchContext";
 import { cn } from "~/lib/utils";
 import { Button } from "../ui/Button";
@@ -137,7 +137,7 @@ export const BuildForm: FC<Props> = ({
                                     currentValue === value.name
                                       ? ""
                                       : currentValue,
-                                  fullName: repo.full_name!,
+                                  fullName: repo.full_name ?? "",
                                 });
                                 setOpen(false);
                               }}

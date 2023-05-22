@@ -102,5 +102,5 @@ export function decodeCompositeKey(compositeKey: string): { id: string; encrypti
     };
   }
 
-  throw new Error(`Unsupported composite key version: ${version}`);
+  throw new Error(`Unsupported composite key version`);
 }
