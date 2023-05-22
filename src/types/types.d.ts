@@ -236,6 +236,14 @@ declare global {
       value: string;
     }[];
   };
+
+  type Insight = {
+    insight: string;
+    solution?: string;
+    positive_message?: string;
+  };
+  
+  type BuildProcessAnalysis = { insights: Insight[]; efficiency_score: number };
 }
 
 export interface Repository {

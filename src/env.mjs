@@ -25,6 +25,8 @@ const server = z.object({
   WEBHOOK_SECRET_TOKEN: z.string().min(1),
 
   GITHUB_APP_CLIENT_SECRET: z.string().min(1),
+
+  OPENAI_API_KEY: z.string().min(1),
 });
 
 /**
@@ -54,6 +56,8 @@ const processEnv = {
 
   NEXT_PUBLIC_GITHUB_APP_CLIENT_ID: process.env.NEXT_PUBLIC_GITHUB_APP_CLIENT_ID,
   GITHUB_APP_CLIENT_SECRET: process.env.GITHUB_APP_CLIENT_SECRET,
+
+  OPENAI_API_KEY: process.env.OPENAI_API_KEY
 };
 
 // Don't touch the part below
