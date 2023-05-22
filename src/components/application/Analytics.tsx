@@ -1,13 +1,14 @@
-import {
-  Card,
-  Col,
-  DonutChart,
-  Grid,
-  Metric,
-  Text,
-  Title,
-} from "@tremor/react";
+import { Card, Col, DonutChart, Grid, Title } from "@tremor/react";
 import { type FC } from "react";
+import {
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  Card as CardUI,
+} from "~/components/ui/Card";
+import { Separator } from "~/components/ui/Separator";
+import { Badge } from "../ui/Badge";
 
 export const Analytics: FC<BuildProcessAnalysis> = ({
   insights,
@@ -18,7 +19,7 @@ export const Analytics: FC<BuildProcessAnalysis> = ({
       <Col numColSpan={1} numColSpanLg={1}>
         <section className="flex gap-10">
           {/* build analitycs */}
-          <Card>
+          <Card className="h-full">
             <Title>Efficiency Score</Title>
             <DonutChart
               className="mt-6 px-8 text-3xl"
@@ -31,10 +32,39 @@ export const Analytics: FC<BuildProcessAnalysis> = ({
         </section>
       </Col>
       {insights?.map((insight, idx) => (
-        <Card key={idx}>
-          <Text>Insight {idx}</Text>
-          <Metric>{insight.insight}</Metric>
-        </Card>
+        <CardUI key={idx + 1} className="w-full">
+          <CardHeader>
+            <CardTitle>Insight {idx + 1}</CardTitle>
+          </CardHeader>
+          <CardContent className="grid gap-2 px-4">
+              {insight.positive_message
+                ? <p className="font-semibold text-green-700">{insight.insight}</p>
+                : <p className="font-semibold text-red-700">{insight.insight}</p>}
+            <Separator />
+            <p className="text-sm font-medium">
+              {insight.positive_message
+                ? insight.positive_message
+                : insight.solution}
+            </p>
+          </CardContent>
+          <CardFooter>
+            {insight.positive_message ? (
+              <Badge
+                variant="secondary"
+                className="bg-green-300 shadow-md shadow-green-500"
+              >
+                Positive
+              </Badge>
+            ) : (
+              <Badge
+                variant="secondary"
+                className="bg-red-300 shadow-md shadow-red-500"
+              >
+                Negative
+              </Badge>
+            )}
+          </CardFooter>
+        </CardUI>
       ))}
     </Grid>
   );

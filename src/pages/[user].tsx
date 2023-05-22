@@ -7,6 +7,10 @@ import { Counter } from "~/components/application/Counter";
 import { envsReducer } from "~/context/envs/dispatch";
 import { EnvContext, EnvDispatchContext } from "~/context/envs/dispatchContext";
 import { fetchRepositories } from "~/lib/fetchRepositories";
+import response from "../../openai-response-example.json";
+import { Analytics } from "~/components/application/Analytics";
+
+const { efficiency_score, insights } = response as BuildProcessAnalysis;
 
 const Installation: NextPage = () => {
   const [value, setValue] = useState({
@@ -45,11 +49,11 @@ const Installation: NextPage = () => {
   return (
     <EnvContext.Provider value={envVars}>
       <EnvDispatchContext.Provider value={dispatch}>
-        <section className="mx-auto mt-10 flex h-full w-full max-w-[1000px] flex-col items-center justify-center">
+        <section className="mx-auto mt-10 mb-10 flex h-full w-full max-w-[1000px] flex-col items-center justify-center">
           {true ? (
-            <section className="bg-dots h-fit w-full rounded-lg border px-8 py-10">
-              <Counter />
-              {/* <Analytics efficiency_score={80} insights={[]} /> */}
+            <section className="bg-dots h-fit w-full rounded-lg border px-8 pt-10 pb-8">
+              {/* <Counter /> */}
+              <Analytics efficiency_score={efficiency_score} insights={insights} />
             </section>
           ) : (
             <BuildForm
