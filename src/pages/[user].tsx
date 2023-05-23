@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { type NextPage } from "next";
+import Pusher from "pusher-js";
 import { useEffect, useReducer, useState } from "react";
 import { useMutation, useQuery } from "react-query";
+import { Analytics } from "~/components/application/Analytics";
 import { BuildForm } from "~/components/application/BuildForm";
 import { Counter } from "~/components/application/Counter";
 import { RootLayout } from "~/components/application/RootLayout";
@@ -9,11 +11,6 @@ import { envsReducer } from "~/context/envs/dispatch";
 import { EnvContext, EnvDispatchContext } from "~/context/envs/dispatchContext";
 import { RepositoryProvider } from "~/context/repository/context";
 import { fetchRepositories } from "~/lib/fetchRepositories";
-import response from "../../openai-response-example.json";
-import Pusher from "pusher";
-
-
-const { efficiency_score, insights } = response as BuildProcessAnalysis; // placerholde data
 
 const Installation: NextPage = () => {
   const [value, setValue] = useState({
@@ -26,6 +23,10 @@ const Installation: NextPage = () => {
     queryKey: ["repositories"],
     queryFn: () => fetchRepositories(),
   });
+  const [data, setData] = useState<{
+    buildId: number;
+    logs: BuildProcessAnalysis;
+  } | null>(null);
 
   const { mutate, isLoading } = useMutation(
     () =>
@@ -48,9 +49,22 @@ const Installation: NextPage = () => {
   );
 
   useEffect(() => {
-      console.log("building")
+    const pusher = new Pusher("8480959283852d2d55a4", {
+      cluster: "us2",
+    });
 
-    
+    console.log("Pusher.Connection.State", pusher.connection.state);
+
+    const channel = pusher.subscribe("logs");
+
+    channel.bind(
+      "logs-output",
+      (data: { buildId: number; logs: BuildProcessAnalysis }) => {
+        setData(data);
+      }
+    );
+
+    return () => pusher.disconnect();
   }, [isBuilding]);
 
   return (
@@ -61,11 +75,14 @@ const Installation: NextPage = () => {
             <section className="mx-auto mb-10 mt-10 flex h-full w-full max-w-[1000px] flex-col items-center justify-center">
               {isBuilding ? (
                 <section className="bg-dots h-fit w-full rounded-lg border px-8 pb-8 pt-10">
-                  <Counter />
-                  {/* <Analytics
-                  efficiency_score={efficiency_score}
-                  insights={insights}
-                /> */}
+                  {data ? (
+                    <Analytics
+                      efficiency_score={data.logs.efficiency_score}
+                      insights={data.logs.insights}
+                    />
+                  ) : (
+                    <Counter />
+                  )}
                 </section>
               ) : (
                 <BuildForm

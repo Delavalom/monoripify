@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest, NextApiResponse } from "next";
 import { generate } from "~/server/openai";
 import { pusher } from "~/server/pusher";
 
@@ -23,10 +23,6 @@ export default async function handleLogs(
   res: NextApiResponse<Response>
 ) {
 
-  await pusher.trigger("logs", "logs-output", {
-    message: "connected"
-  })
-
   const buildOutput = req.body as RequestBody;
 
   const analysis = await generate(buildOutput.logs);
@@ -36,7 +32,14 @@ export default async function handleLogs(
       .status(404)
       .json(analysis as { message: "error"; content: string });
   }
-  const output = JSON.parse(analysis.message) as BuildProcessAnalysis;
+
+  console.log(analysis.content)
+  const output = JSON.parse(analysis.content) as BuildProcessAnalysis;
+
+  await pusher.trigger("logs", "logs-output", {
+    buildId: buildOutput.build_id,
+    logs: output
+  })
 
   return res.status(200).json({
     message: "success",

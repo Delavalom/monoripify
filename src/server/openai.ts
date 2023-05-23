@@ -9,9 +9,8 @@ export type Messages = CreateChatCompletionRequest["messages"];
 
 const apiKey = env.OPENAI_API_KEY;
 
-const CONTENT = `The following text is the logs for a build process in a GitHub repository. Tell me a list of 5 insights about it (except about telemetry matters since most users are opt-in to this option), like how can the process improve, maybe some pain points, after each insight give me a potential brief solution or if everything is perfect a positive message. Also at the end give me a score about the efficiency of the process from 0 to 100 in the following format “Efficiency Score: x”. Give me this prompt in the following JSON format: 
-
-'{
+const CONTENT = `The following text is the logs for a build process in a GitHub repository. Tell me a list of 5 insights about it (except about telemetry matters since most users are opt-in to this option), like how can the process improve, maybe some pain points, after each insight give me a potential brief solution or if everything is perfect a positive message. Also at the end give me a score about the efficiency of the process from 0 to 100 in the following format “Efficiency Score: x”. Give me this prompt in the following JSON format, and without backticks for markdown, just simple JSON format: 
+{
   "insights": [
     {
       "insight": string,
@@ -35,7 +34,7 @@ const CONTENT = `The following text is the logs for a build process in a GitHub 
     }
   ],
   "efficiency_score": number
-}'
+}
 
 logs: `;
 
@@ -69,7 +68,10 @@ export async function generate(
         content: "recieve a response from the analyser but comes empty",
       };
     }
-    return { message: "success", content: payload.message.content };
+
+    const cleanedString = payload.message.content.replace(/^(```json\s*|`)|(```|`)$/g, '').trim();
+
+    return { message: "success", content: cleanedString };
   } catch (error) {
     if (error instanceof Error) {
       return { message: "error", content: error.message };

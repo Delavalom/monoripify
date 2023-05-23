@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/require-await */
 import type { NextApiRequest, NextApiResponse } from "next";
-import Pusher from "pusher";
-import { env } from "~/env.mjs";
 import { getInstallationId } from "~/lib/getInstallationId";
 import { octokitApp } from "~/server/octokit";
 

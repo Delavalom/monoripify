@@ -18,9 +18,12 @@ export const Counter: FC = () => {
   const counter = formatCounter(count)
 
   return (
-    <section className="flex items-center justify-center">
-      <Loader className="mr-1 h-4 w-4 animate-spin" />
-      <h1>{counter}</h1>
+    <section className="flex gap-3 flex-col items-center justify-center">
+      <h1>Building:</h1> 
+      <div className="flex gap-1 items-center justify-center">
+        <Loader className="h-4 w-4 animate-spin" />
+        <h1>{counter}</h1>
+      </div>
     </section>
   );
 };

@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { type GetServerSidePropsContext } from "next";
 import {
   getServerSession,
@@ -57,8 +60,8 @@ export const authOptions: NextAuthOptions = {
   secret: env.NEXTAUTH_SECRET,
   providers: [
     GithubProvider({
-      clientId: env.NEXT_PUBLIC_CLIENT_ID,
-      clientSecret: env.CLIENT_SECRET,
+      clientId: env.NEXT_PUBLIC_GITHUB_APP_CLIENT_ID,
+      clientSecret: env.GITHUB_APP_CLIENT_SECRET,
       profile(profile) {
         return {
           id: profile.id.toString(),
@@ -70,23 +73,6 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
-  events: {
-    signIn(message) {
-      console.log("Sign In", message);
-    },
-    signOut(message) {
-      console.log("Sign Out", message);
-    },
-    session(message) {
-      console.log("Session", message);
-    },
-    linkAccount(message) {
-      console.log("Link Account", message);
-    },
-    createUser(message) {
-      console.log("Create User", message);
-    },
-  },
 };
 
 export const getServerAuthSession = (ctx: {
