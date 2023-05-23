@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { ExternalLink, Github, Loader2, LogOut } from "lucide-react";
 import { signOut } from "next-auth/react";
-import { useState, type FC } from "react";
+import { useState, type FC, useContext } from "react";
 
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
@@ -10,6 +10,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/Popover";
 import { useMutation } from "react-query";
 import { useToast } from "~/hooks/useToast";
 import type { DeployResponse } from "~/pages/api/deploy";
+import { MyRepoContext } from "~/context/repository/context";
 
 type Props = {
   showDeploy?: boolean;
@@ -19,16 +20,20 @@ export const Navbar: FC<Props> = ({ showDeploy }) => {
   const [token, setToken] = useState("");
   const [hasToken, setHasToken] = useState(false);
   const [projectId, setProjectId] = useState("");
+  const { repository } = useContext(MyRepoContext);
   const { toast } = useToast();
 
   const { mutate, isLoading } = useMutation({
-    mutationFn: (token: string) =>
+    mutationFn: (variables: { token: string; fullRepoName: string }) =>
       fetch("/api/deploy", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ token }),
+        body: JSON.stringify({
+          token: variables.token,
+          fullRepoName: variables.fullRepoName,
+        }),
       })
         .then(
           (res) =>
@@ -88,7 +93,10 @@ export const Navbar: FC<Props> = ({ showDeploy }) => {
             <>
               {projectId !== "" ? (
                 <Button asChild variant="outline">
-                  <a href={`https://railway.app/project/${projectId}`} target="_blank">
+                  <a
+                    href={`https://railway.app/project/${projectId}`}
+                    target="_blank"
+                  >
                     Deployment Link
                     <ExternalLink className="ml-2 h-4 w-4 opacity-70" />
                   </a>
@@ -131,7 +139,11 @@ export const Navbar: FC<Props> = ({ showDeploy }) => {
                                 ) : (
                                   <Button
                                     className="w-full"
-                                    onClick={() => mutate(token)}
+                                    onClick={() => {
+                                      if(repository?.full_name) {
+                                        mutate({ token, fullRepoName: repository.full_name })
+                                      }
+                                    }}
                                   >
                                     Deploy
                                   </Button>

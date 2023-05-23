@@ -1,5 +1,7 @@
 // Push Event Types
 
+import type { UnknownKeysParam } from "zod";
+
 export type PushEvent = {
   ref: string;
   before: string;
@@ -254,7 +256,7 @@ export interface Repository {
   private: boolean;
   owner: Owner;
   html_url: string;
-  description: any;
+  description: string;
   fork: boolean;
   url: string;
   forks_url: string;
@@ -300,7 +302,7 @@ export interface Repository {
   ssh_url: string;
   clone_url: string;
   svn_url: string;
-  homepage: any;
+  homepage: unknown;
   size: number;
   stargazers_count: number;
   watchers_count: number;
@@ -312,15 +314,15 @@ export interface Repository {
   has_pages: boolean;
   has_discussions: boolean;
   forks_count: number;
-  mirror_url: any;
+  mirror_url: string;
   archived: boolean;
   disabled: boolean;
   open_issues_count: number;
-  license: any;
+  license: string;
   allow_forking: boolean;
   is_template: boolean;
   web_commit_signoff_required: boolean;
-  topics: any[];
+  topics: UnknownKeysParam[];
   visibility: string;
   forks: number;
   open_issues: number;

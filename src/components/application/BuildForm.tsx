@@ -33,6 +33,7 @@ import { Input } from "../ui/Input";
 import { Label } from "../ui/Label";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/Popover";
 import { ScrollArea } from "../ui/ScrollArea";
+import { MyRepoContext } from "~/context/repository/context";
 
 type Props = {
   repositories: Partial<CustomRepoSchema>[] | undefined;
@@ -58,6 +59,7 @@ export const BuildForm: FC<Props> = ({
   const router = useRouter();
   const envVars = useContext(EnvContext);
   const dispatch = useContext(EnvDispatchContext);
+  const { setRepository } = useContext(MyRepoContext)
 
   if (!dispatch) {
     return <></>;
@@ -139,6 +141,7 @@ export const BuildForm: FC<Props> = ({
                                       : currentValue,
                                   fullName: repo.full_name ?? "",
                                 });
+                                setRepository(repo)
                                 setOpen(false);
                               }}
                             >
