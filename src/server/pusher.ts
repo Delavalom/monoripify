@@ -1,15 +1,9 @@
 import Pusher from "pusher";
+import { env } from "~/env.mjs";
 
-const pusher = new Pusher({
-  appId: "1602733",
-  key: "8480959283852d2d55a4",
-  secret: "c7f505c82e74f744cea6",
-  cluster: "us2",
-  useTLS: true,
-});
-
-export async function sendMessage() {
-  await pusher.trigger("my-channel", "my-event", {
-    message: "hello world",
-  });
-}
+export const pusher = new Pusher({
+  key: env.PUSHER_APP_KEY,
+  appId: env.PUSHER_APP_ID,
+  secret: env.PUSHER_APP_SECRET,
+  cluster: env.PUSHER_APP_CLUSTER,
+})

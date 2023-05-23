@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { type NextPage } from "next";
-import { useReducer, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { BuildForm } from "~/components/application/BuildForm";
 import { Counter } from "~/components/application/Counter";
@@ -10,6 +10,8 @@ import { EnvContext, EnvDispatchContext } from "~/context/envs/dispatchContext";
 import { RepositoryProvider } from "~/context/repository/context";
 import { fetchRepositories } from "~/lib/fetchRepositories";
 import response from "../../openai-response-example.json";
+import Pusher from "pusher";
+
 
 const { efficiency_score, insights } = response as BuildProcessAnalysis; // placerholde data
 
@@ -44,6 +46,12 @@ const Installation: NextPage = () => {
       },
     }
   );
+
+  useEffect(() => {
+      console.log("building")
+
+    
+  }, [isBuilding]);
 
   return (
     <RepositoryProvider>

@@ -19,7 +19,7 @@ const server = z.object({
     // VERCEL_URL doesn't include `https` so it cant be validated as a URL
     process.env.VERCEL ? z.string().min(1) : z.string().url()
   ),
-  
+
   APP_ID: z.string().min(1),
   PRIVATE_KEY: z.string().min(1),
   WEBHOOK_SECRET_TOKEN: z.string().min(1),
@@ -28,6 +28,10 @@ const server = z.object({
 
   OPENAI_API_KEY: z.string().min(1),
 
+  PUSHER_APP_ID: z.string().min(1),
+  PUSHER_APP_KEY: z.string().min(1),
+  PUSHER_APP_SECRET: z.string().min(1),
+  PUSHER_APP_CLUSTER: z.string().min(1),
 });
 
 /**
@@ -38,7 +42,7 @@ const client = z.object({
   //   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().min(1)
   NEXT_PUBLIC_GITHUB_APP_CLIENT_ID: z.string().min(1),
 
-  NEXT_PUBLIC_RAILWAY_TOKEN: z.string().optional()
+  NEXT_PUBLIC_RAILWAY_TOKEN: z.string().optional(),
 });
 
 /**
@@ -57,12 +61,18 @@ const processEnv = {
   PRIVATE_KEY: process.env.PRIVATE_KEY,
   WEBHOOK_SECRET_TOKEN: process.env.WEBHOOK_SECRET_TOKEN,
 
-  NEXT_PUBLIC_GITHUB_APP_CLIENT_ID: process.env.NEXT_PUBLIC_GITHUB_APP_CLIENT_ID,
+  NEXT_PUBLIC_GITHUB_APP_CLIENT_ID:
+    process.env.NEXT_PUBLIC_GITHUB_APP_CLIENT_ID,
   GITHUB_APP_CLIENT_SECRET: process.env.GITHUB_APP_CLIENT_SECRET,
 
   OPENAI_API_KEY: process.env.OPENAI_API_KEY,
 
-  NEXT_PUBLIC_RAILWAY_TOKEN: process.env.NEXT_PUBLIC_RAILWAY_TOKEN
+  NEXT_PUBLIC_RAILWAY_TOKEN: process.env.NEXT_PUBLIC_RAILWAY_TOKEN,
+
+  PUSHER_APP_ID: process.env.PUSHER_APP_ID,
+  PUSHER_APP_KEY: process.env.PUSHER_APP_KEY,
+  PUSHER_APP_SECRET: process.env.PUSHER_APP_SECRET,
+  PUSHER_APP_CLUSTER: process.env.PUSHER_APP_CLUSTER,
 };
 
 // Don't touch the part below

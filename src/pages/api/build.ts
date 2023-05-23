@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/require-await */
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getToken } from "next-auth/jwt";
+import Pusher from "pusher";
+import { env } from "~/env.mjs";
 import { getInstallationId } from "~/lib/getInstallationId";
 import { octokitApp } from "~/server/octokit";
 
@@ -8,14 +9,13 @@ export default async function output(
   req: NextApiRequest,
   res: NextApiResponse<{ message: string }>
 ) {
-
   const installationId = await getInstallationId(req, res)
 
   const isInitialBuild = req.headers["x-initial-build"];
 
   if (isInitialBuild === "true") {
     try {
-      handleInitialBuild(req.body, installationId);
+      await handleInitialBuild(req.body as SubmitData, installationId);
       return res.status(200).json({ message: "succeed" });
     } catch (error) {
       if (error instanceof Error) {
@@ -29,9 +29,7 @@ export default async function output(
 }
 
 async function handleInitialBuild(payload: SubmitData, installationId: number) {
-  const octokit = await octokitApp.getInstallationOctokit(
-    installationId
-  );
+  const octokit = await octokitApp.getInstallationOctokit(installationId);
 
   let envs: string;
 

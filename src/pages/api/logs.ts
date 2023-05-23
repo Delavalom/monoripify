@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { generate } from "~/server/openai";
+import { pusher } from "~/server/pusher";
 
 type RequestBody = {
   build_id: number;
@@ -21,6 +22,11 @@ export default async function handleLogs(
   req: NextApiRequest,
   res: NextApiResponse<Response>
 ) {
+
+  await pusher.trigger("logs", "logs-output", {
+    message: "connected"
+  })
+
   const buildOutput = req.body as RequestBody;
 
   const analysis = await generate(buildOutput.logs);
