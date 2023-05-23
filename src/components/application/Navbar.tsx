@@ -1,19 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { ExternalLink, Github, LogOut } from "lucide-react";
 import { signOut } from "next-auth/react";
-import { useContext, useEffect, useState, type FC } from "react";
-import { ApolloClientContext } from "~/context/apolloClient/context";
+import { useState, type FC } from "react";
+import { createProject } from "~/lib/createProject";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/Popover";
 
 type Props = {
-  onClick?: () => void;
+  showDeploy?: boolean
 };
 
-export const Navbar: FC<Props> = ({ onClick }) => {
+export const Navbar: FC<Props> = ({ showDeploy }) => {
   return (
     <header className="h-fit w-full border-b-2 p-4">
       <section className="mx-auto flex max-w-[1200px] items-center justify-between">
@@ -43,7 +42,7 @@ export const Navbar: FC<Props> = ({ onClick }) => {
           </nav> */}
         </div>
         <div className="flex items-center gap-6">
-          {onClick && <RailwayPopover onClick={onClick} />}
+          {showDeploy && <RailwayPopover />}
           <Button variant="outline">
             View on github
             <ExternalLink className="ml-2 h-4 w-4 opacity-70" />
@@ -59,31 +58,9 @@ export const Navbar: FC<Props> = ({ onClick }) => {
 
 
 
-export const RailwayPopover = ({onClick}: {onClick: () => void}) => {
-  const [value, setValue] = useState("");
+export const RailwayPopover = () => {
+  const [token, setToken] = useState("");
   const [isToken, setIsToken] = useState(false);
-  const { setClient } = useContext(ApolloClientContext);
-
-  useEffect(() => {
-    let hasChange = false;
-
-    if (!hasChange) {
-      const client = new ApolloClient({
-        uri: "https://backboard.railway.app/graphql/v2",
-        cache: new InMemoryCache(),
-        headers: {
-          Autorization: `Bearer ${value}`,
-          "Content-Type": "application/json",
-        },
-      });
-
-      setClient(client);
-    }
-
-    return () => {
-      hasChange = true;
-    };
-  }, [isToken]);
 
   return (
     <Popover>
@@ -109,14 +86,14 @@ export const RailwayPopover = ({onClick}: {onClick: () => void}) => {
                 {isToken ? (
                   <>
                     <Button variant="secondary" onClick={() => setIsToken(false)}>Discard</Button>
-                    <Button className="w-full" onClick={() => onClick()}>Deploy</Button>
+                    <Button className="w-full" onClick={() => createProject(token)}>Deploy</Button>
                   </>
                 ) : (
                   <>
                     <Input
                       id="token"
-                      value={value}
-                      onChange={(e) => setValue(e.target.value)}
+                      value={token}
+                      onChange={(e) => setToken(e.target.value)}
                       className="h-8 w-full flex-1"
                     />
                     <Button onClick={() => setIsToken(true)}>Save</Button>

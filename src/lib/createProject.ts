@@ -26,6 +26,8 @@ export const createProject = async (token: string) => {
 
   const id = (await response.json()) as { id: string };
 
+  console.log(id)
+
   return id;
 };
 
