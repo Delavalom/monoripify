@@ -1,9 +1,10 @@
-import "~/styles/globals.css";
-import type { AppProps } from "next/app";
-import { RootLayout } from "~/components/application/RootLayout";
-import { SessionProvider } from "next-auth/react";
+import { ApolloProvider } from "@apollo/client";
 import type { Session } from "next-auth";
+import { SessionProvider } from "next-auth/react";
+import type { AppProps } from "next/app";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { client } from "~/lib/apolloClient";
+import "~/styles/globals.css";
 
 const queryClient = new QueryClient();
 
@@ -12,12 +13,13 @@ export default function App({
   pageProps: { session, ...pageProps },
 }: AppProps<{ session: Session }>) {
   return (
+    <ApolloProvider client={client}>
+
     <QueryClientProvider client={queryClient}>
       <SessionProvider session={session}>
-        <RootLayout>
           <Component {...pageProps} />
-        </RootLayout>
       </SessionProvider>
     </QueryClientProvider>
+    </ApolloProvider>
   );
 }

@@ -6,12 +6,13 @@ const inter = Inter({ subsets: ["latin"] });
 
 type Props = {
   children: ReactNode;
+  onClick?: () => void
 };
 
-export const RootLayout: FC<Props> = ({ children }) => {
+export const RootLayout: FC<Props> = ({ children, onClick }) => {
   return (
     <main className={`flex min-h-screen flex-col ${inter.className}`}>
-      <Navbar />
+      <Navbar onClick={onClick} />
       {children}
     </main>
   );

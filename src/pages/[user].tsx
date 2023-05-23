@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import { type NextPage } from "next";
-import { useRouter } from "next/router";
 import { useReducer, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { BuildForm } from "~/components/application/BuildForm";
@@ -9,6 +9,9 @@ import { EnvContext, EnvDispatchContext } from "~/context/envs/dispatchContext";
 import { fetchRepositories } from "~/lib/fetchRepositories";
 import response from "../../openai-response-example.json";
 import { Analytics } from "~/components/application/Analytics";
+import { CREATE_PROJECT } from "~/lib/apolloClient";
+import { useMutation as useGqlMutation } from "@apollo/client";
+import { RootLayout } from "~/components/application/RootLayout";
 
 const { efficiency_score, insights } = response as BuildProcessAnalysis;
 
@@ -17,13 +20,16 @@ const Installation: NextPage = () => {
     name: "",
     fullName: "",
   });
-  const router = useRouter();
   const [envVars, dispatch] = useReducer(envsReducer, []);
   const [isBuilding, setIsBuilding] = useState(false);
   const { data: repositories } = useQuery({
     queryKey: ["repositories"],
     queryFn: () => fetchRepositories(),
   });
+
+  const [createProject, { data, loading, error }] = useGqlMutation<{
+    id: string;
+  }>(CREATE_PROJECT);
 
   const { mutate, isLoading } = useMutation(
     () => {
@@ -47,26 +53,31 @@ const Installation: NextPage = () => {
   );
 
   return (
-    <EnvContext.Provider value={envVars}>
-      <EnvDispatchContext.Provider value={dispatch}>
-        <section className="mx-auto mt-10 mb-10 flex h-full w-full max-w-[1000px] flex-col items-center justify-center">
-          {true ? (
-            <section className="bg-dots h-fit w-full rounded-lg border px-8 pt-10 pb-8">
-              {/* <Counter /> */}
-              <Analytics efficiency_score={efficiency_score} insights={insights} />
-            </section>
-          ) : (
-            <BuildForm
-              isLoading={isLoading}
-              mutate={mutate}
-              setValue={setValue}
-              value={value}
-              repositories={repositories?.data}
-            />
-          )}
-        </section>
-      </EnvDispatchContext.Provider>
-    </EnvContext.Provider>
+    <RootLayout onClick={() => createProject({})}>
+      <EnvContext.Provider value={envVars}>
+        <EnvDispatchContext.Provider value={dispatch}>
+          <section className="mx-auto mb-10 mt-10 flex h-full w-full max-w-[1000px] flex-col items-center justify-center">
+            {true ? (
+              <section className="bg-dots h-fit w-full rounded-lg border px-8 pb-8 pt-10">
+                {/* <Counter /> */}
+                <Analytics
+                  efficiency_score={efficiency_score}
+                  insights={insights}
+                />
+              </section>
+            ) : (
+              <BuildForm
+                isLoading={isLoading}
+                mutate={mutate}
+                setValue={setValue}
+                value={value}
+                repositories={repositories?.data}
+              />
+            )}
+          </section>
+        </EnvDispatchContext.Provider>
+      </EnvContext.Provider>
+    </RootLayout>
   );
 };
 
