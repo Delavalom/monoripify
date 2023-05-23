@@ -49,7 +49,7 @@ const Installation: NextPage = () => {
   );
 
   useEffect(() => {
-    const pusher = new Pusher("8480959283852d2d55a4", {
+    const pusher = new Pusher("bbb49189ce0e1f052a52", {
       cluster: "us2",
     });
 
