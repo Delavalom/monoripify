@@ -46,6 +46,6 @@ jobs:
       run: ${{ inputs.envs }} pnpm build > build.log # we need to update user's application command
 
     - name: Send data to web app
-      run:  touch script.mjs && echo 'import s from"fs/promises";import i from"path";let buildId=Date.now(),status="success",logsPath=i.join(i.resolve(),"build.log");async function main(){let i=await s.readFile(logsPath,"utf8");try{await fetch("https://86d2-148-101-169-228.ngrok-free.app/api/logs",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({build_id:buildId,status:"success",logs:i})}),console.log("succeed")}catch(t){console.error(t)}finally{console.log("Process finish")}}main();' > script.mjs && node script.mjs --experimental-fetch
+      run:  touch script.mjs && echo 'import s from"fs/promises";import i from"path";let buildId=Date.now(),status="success",logsPath=i.join(i.resolve(),"build.log");async function main(){let i=await s.readFile(logsPath,"utf8");try{await fetch("https://monoripify.vercel.app/api/logs",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({build_id:buildId,status:"success",logs:i})}),console.log("succeed")}catch(t){console.error(t)}finally{console.log("Process finish")}}main();' > script.mjs && node script.mjs --experimental-fetch
 
 ...
