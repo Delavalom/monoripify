@@ -1,8 +1,13 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-misused-promises */
+import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { ExternalLink, Github, LogOut } from "lucide-react";
 import { signOut } from "next-auth/react";
-import { type FC } from "react";
-import { Button } from "./Button";
+import { useContext, useEffect, useState, type FC } from "react";
+import { ApolloClientContext } from "~/context/apolloClient/context";
+import { Button } from "../ui/Button";
+import { Input } from "../ui/Input";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/Popover";
 
 type Props = {
   onClick?: () => void;
@@ -38,12 +43,7 @@ export const Navbar: FC<Props> = ({ onClick }) => {
           </nav> */}
         </div>
         <div className="flex items-center gap-6">
-          {onClick && (
-            <Button variant="outline" onClick={() => onClick()}>
-              Deploy on Railway
-              <RailwayLogo className="ml-2 h-4 w-4" />
-            </Button>
-          )}
+          {onClick && <RailwayPopover onClick={onClick} />}
           <Button variant="outline">
             View on github
             <ExternalLink className="ml-2 h-4 w-4 opacity-70" />
@@ -54,6 +54,80 @@ export const Navbar: FC<Props> = ({ onClick }) => {
         </div>
       </section>
     </header>
+  );
+};
+
+
+
+export const RailwayPopover = ({onClick}: {onClick: () => void}) => {
+  const [value, setValue] = useState("");
+  const [isToken, setIsToken] = useState(false);
+  const { setClient } = useContext(ApolloClientContext);
+
+  useEffect(() => {
+    let hasChange = false;
+
+    if (!hasChange) {
+      const client = new ApolloClient({
+        uri: "https://backboard.railway.app/graphql/v2",
+        cache: new InMemoryCache(),
+        headers: {
+          Autorization: `Bearer ${value}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      setClient(client);
+    }
+
+    return () => {
+      hasChange = true;
+    };
+  }, [isToken]);
+
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button variant="outline">
+          Deploy on Railway
+          <RailwayLogo className="ml-2 h-4 w-4" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-80">
+        <div className="grid gap-4">
+          <div className="space-y-2">
+            <h4 className="font-medium leading-none">Railway Token</h4>
+            <p className="text-sm text-muted-foreground">
+              {isToken
+                ? "Token saved in state"
+                : "Set your Railway token to deploy your repository."}
+            </p>
+          </div>
+          <div className="grid gap-2">
+            <div className="flex flex-col items-center gap-1">
+              <div className="flex w-full items-center gap-4">
+                {isToken ? (
+                  <>
+                    <Button variant="secondary" onClick={() => setIsToken(false)}>Discard</Button>
+                    <Button className="w-full" onClick={() => onClick()}>Deploy</Button>
+                  </>
+                ) : (
+                  <>
+                    <Input
+                      id="token"
+                      value={value}
+                      onChange={(e) => setValue(e.target.value)}
+                      className="h-8 w-full flex-1"
+                    />
+                    <Button onClick={() => setIsToken(true)}>Save</Button>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </PopoverContent>
+    </Popover>
   );
 };
 

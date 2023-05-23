@@ -1,17 +1,14 @@
 import { type ReactNode, type FC } from "react";
-import { Navbar } from "../ui/Navbar";
-import { Inter } from "next/font/google";
-
-const inter = Inter({ subsets: ["latin"] });
+import { Navbar } from "./Navbar";
 
 type Props = {
   children: ReactNode;
-  onClick?: () => void
+  onClick?: () => void;
 };
 
 export const RootLayout: FC<Props> = ({ children, onClick }) => {
   return (
-    <main className={`flex min-h-screen flex-col ${inter.className}`}>
+    <main className="flex min-h-screen flex-col">
       <Navbar onClick={onClick} />
       {children}
     </main>

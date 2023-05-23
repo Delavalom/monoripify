@@ -9,9 +9,10 @@ import { EnvContext, EnvDispatchContext } from "~/context/envs/dispatchContext";
 import { fetchRepositories } from "~/lib/fetchRepositories";
 import response from "../../openai-response-example.json";
 import { Analytics } from "~/components/application/Analytics";
-import { CREATE_PROJECT } from "~/lib/apolloClient";
+import { CREATE_PROJECT } from "~/lib/createProject";
 import { useMutation as useGqlMutation } from "@apollo/client";
 import { RootLayout } from "~/components/application/RootLayout";
+import { ApolloClientProvider } from "~/context/apolloClient/context";
 
 const { efficiency_score, insights } = response as BuildProcessAnalysis;
 
@@ -29,7 +30,11 @@ const Installation: NextPage = () => {
 
   const [createProject, { data, loading, error }] = useGqlMutation<{
     id: string;
-  }>(CREATE_PROJECT);
+  }>(CREATE_PROJECT, {
+    onCompleted(data) {
+      console.log(data.id)
+    }
+  });
 
   const { mutate, isLoading } = useMutation(
     () => {
@@ -53,31 +58,33 @@ const Installation: NextPage = () => {
   );
 
   return (
-    <RootLayout onClick={() => createProject({})}>
-      <EnvContext.Provider value={envVars}>
-        <EnvDispatchContext.Provider value={dispatch}>
-          <section className="mx-auto mb-10 mt-10 flex h-full w-full max-w-[1000px] flex-col items-center justify-center">
-            {true ? (
-              <section className="bg-dots h-fit w-full rounded-lg border px-8 pb-8 pt-10">
-                {/* <Counter /> */}
-                <Analytics
-                  efficiency_score={efficiency_score}
-                  insights={insights}
+    <ApolloClientProvider>
+      <RootLayout onClick={() => createProject({})}>
+        <EnvContext.Provider value={envVars}>
+          <EnvDispatchContext.Provider value={dispatch}>
+            <section className="mx-auto mb-10 mt-10 flex h-full w-full max-w-[1000px] flex-col items-center justify-center">
+              {true ? (
+                <section className="bg-dots h-fit w-full rounded-lg border px-8 pb-8 pt-10">
+                  {/* <Counter /> */}
+                  <Analytics
+                    efficiency_score={efficiency_score}
+                    insights={insights}
+                  />
+                </section>
+              ) : (
+                <BuildForm
+                  isLoading={isLoading}
+                  mutate={mutate}
+                  setValue={setValue}
+                  value={value}
+                  repositories={repositories?.data}
                 />
-              </section>
-            ) : (
-              <BuildForm
-                isLoading={isLoading}
-                mutate={mutate}
-                setValue={setValue}
-                value={value}
-                repositories={repositories?.data}
-              />
-            )}
-          </section>
-        </EnvDispatchContext.Provider>
-      </EnvContext.Provider>
-    </RootLayout>
+              )}
+            </section>
+          </EnvDispatchContext.Provider>
+        </EnvContext.Provider>
+      </RootLayout>
+    </ApolloClientProvider>
   );
 };
 

@@ -28,7 +28,6 @@ const server = z.object({
 
   OPENAI_API_KEY: z.string().min(1),
 
-  RAILWAY_TOKEN: z.string().min(1).optional()
 });
 
 /**
@@ -37,7 +36,9 @@ const server = z.object({
  */
 const client = z.object({
   //   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().min(1)
-  NEXT_PUBLIC_GITHUB_APP_CLIENT_ID: z.string().min(1)
+  NEXT_PUBLIC_GITHUB_APP_CLIENT_ID: z.string().min(1),
+
+  NEXT_PUBLIC_RAILWAY_TOKEN: z.string().optional()
 });
 
 /**
@@ -61,7 +62,7 @@ const processEnv = {
 
   OPENAI_API_KEY: process.env.OPENAI_API_KEY,
 
-  RAILWAY_TOKEN: process.env.RAILWAY_TOKEN
+  NEXT_PUBLIC_RAILWAY_TOKEN: process.env.NEXT_PUBLIC_RAILWAY_TOKEN
 };
 
 // Don't touch the part below

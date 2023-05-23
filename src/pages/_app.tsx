@@ -3,8 +3,11 @@ import type { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import type { AppProps } from "next/app";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { client } from "~/lib/apolloClient";
+import { apolloClient } from "~/lib/createProject";
 import "~/styles/globals.css";
+import { Inter } from "next/font/google";
+
+const inter = Inter({ subsets: ["latin"] });
 
 const queryClient = new QueryClient();
 
@@ -13,13 +16,14 @@ export default function App({
   pageProps: { session, ...pageProps },
 }: AppProps<{ session: Session }>) {
   return (
-    <ApolloProvider client={client}>
-
-    <QueryClientProvider client={queryClient}>
-      <SessionProvider session={session}>
-          <Component {...pageProps} />
-      </SessionProvider>
-    </QueryClientProvider>
+    <ApolloProvider client={apolloClient}>
+      <QueryClientProvider client={queryClient}>
+        <SessionProvider session={session}>
+          <main className={`h-full w-full ${inter.className}`}>
+            <Component {...pageProps} />
+          </main>
+        </SessionProvider>
+      </QueryClientProvider>
     </ApolloProvider>
   );
 }
