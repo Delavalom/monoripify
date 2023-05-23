@@ -9,8 +9,9 @@ import { envsReducer } from "~/context/envs/dispatch";
 import { EnvContext, EnvDispatchContext } from "~/context/envs/dispatchContext";
 import { fetchRepositories } from "~/lib/fetchRepositories";
 import response from "../../openai-response-example.json";
+import { Counter } from "~/components/application/Counter";
 
-const { efficiency_score, insights } = response as BuildProcessAnalysis;
+const { efficiency_score, insights } = response as BuildProcessAnalysis; // placerholde data
 
 const Installation: NextPage = () => {
   const [value, setValue] = useState({
@@ -25,8 +26,8 @@ const Installation: NextPage = () => {
   });
 
   const { mutate, isLoading } = useMutation(
-    () => {
-      return fetch("/api/build", {
+    () =>
+      fetch("/api/build", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -36,8 +37,7 @@ const Installation: NextPage = () => {
           repoFullname: value.fullName,
           envs: envVars,
         } as SubmitData),
-      });
-    },
+      }),
     {
       onSuccess() {
         setIsBuilding(true);
@@ -50,13 +50,13 @@ const Installation: NextPage = () => {
       <EnvContext.Provider value={envVars}>
         <EnvDispatchContext.Provider value={dispatch}>
           <section className="mx-auto mb-10 mt-10 flex h-full w-full max-w-[1000px] flex-col items-center justify-center">
-            {true ? (
+            {isBuilding ? (
               <section className="bg-dots h-fit w-full rounded-lg border px-8 pb-8 pt-10">
-                {/* <Counter /> */}
-                <Analytics
+                <Counter />
+                {/* <Analytics
                   efficiency_score={efficiency_score}
                   insights={insights}
-                />
+                /> */}
               </section>
             ) : (
               <BuildForm

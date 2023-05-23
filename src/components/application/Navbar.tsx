@@ -1,18 +1,60 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import { ExternalLink, Github, LogOut } from "lucide-react";
+import { ExternalLink, Github, Loader2, LogOut } from "lucide-react";
 import { signOut } from "next-auth/react";
 import { useState, type FC } from "react";
-import { createProject } from "~/lib/createProject";
+
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/Popover";
+import { useMutation } from "react-query";
+import { useToast } from "~/hooks/useToast";
+import type { DeployResponse } from "~/pages/api/deploy";
 
 type Props = {
-  showDeploy?: boolean
+  showDeploy?: boolean;
 };
 
 export const Navbar: FC<Props> = ({ showDeploy }) => {
+  const [token, setToken] = useState("");
+  const [hasToken, setHasToken] = useState(false);
+  const [projectId, setProjectId] = useState("");
+  const { toast } = useToast();
+
+  const { mutate, isLoading } = useMutation({
+    mutationFn: (token: string) =>
+      fetch("/api/deploy", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token }),
+      })
+        .then(
+          (res) =>
+            res.json() as Promise<{
+              message: string;
+              deployment: DeployResponse;
+            }>
+        )
+        .then((d) => d),
+    onSuccess(response) {
+      const id = response.deployment.data.projectCreate.id;
+      setProjectId(id);
+      toast({
+        title: "This is your project Id",
+        description: id,
+        action: (
+          <Button asChild>
+            <a href={`https://railway.app/project/${id}`}>
+              Link to the project
+            </a>
+          </Button>
+        ),
+      });
+    },
+  });
+
   return (
     <header className="h-fit w-full border-b-2 p-4">
       <section className="mx-auto flex max-w-[1200px] items-center justify-between">
@@ -42,10 +84,84 @@ export const Navbar: FC<Props> = ({ showDeploy }) => {
           </nav> */}
         </div>
         <div className="flex items-center gap-6">
-          {showDeploy && <RailwayPopover />}
+          {showDeploy && (
+            <>
+              {projectId !== "" ? (
+                <Button asChild variant="outline">
+                  <a href={`https://railway.app/project/${projectId}`} target="_blank">
+                    Deployment Link
+                    <ExternalLink className="ml-2 h-4 w-4 opacity-70" />
+                  </a>
+                </Button>
+              ) : (
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button variant="outline">
+                      Deploy on Railway
+                      <RailwayLogo className="ml-2 h-4 w-4" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-80">
+                    <div className="grid gap-4">
+                      <div className="space-y-2">
+                        <h4 className="font-medium leading-none">
+                          Railway Token
+                        </h4>
+                        <p className="text-sm text-muted-foreground">
+                          {hasToken
+                            ? "Token saved in state"
+                            : "Set your Railway token to deploy your repository."}
+                        </p>
+                      </div>
+                      <div className="grid gap-2">
+                        <div className="flex flex-col items-center gap-1">
+                          <div className="flex w-full items-center gap-4">
+                            {hasToken ? (
+                              <>
+                                <Button
+                                  variant="secondary"
+                                  onClick={() => setHasToken(false)}
+                                >
+                                  Discard
+                                </Button>
+                                {isLoading ? (
+                                  <Button className="w-full" disabled>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                  </Button>
+                                ) : (
+                                  <Button
+                                    className="w-full"
+                                    onClick={() => mutate(token)}
+                                  >
+                                    Deploy
+                                  </Button>
+                                )}
+                              </>
+                            ) : (
+                              <>
+                                <Input
+                                  id="token"
+                                  value={token}
+                                  onChange={(e) => setToken(e.target.value)}
+                                  className="h-8 w-full flex-1"
+                                />
+                                <Button onClick={() => setHasToken(true)}>
+                                  Save
+                                </Button>
+                              </>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </PopoverContent>
+                </Popover>
+              )}
+            </>
+          )}
           <Button variant="outline">
             View on github
-            <ExternalLink className="ml-2 h-4 w-4 opacity-70" />
+            <ExternalLink className="ml-2 h-4 w-4 opacity-70 hover:scale-125" />
           </Button>
           <Button variant="outline" onClick={() => signOut()}>
             <LogOut />
@@ -53,58 +169,6 @@ export const Navbar: FC<Props> = ({ showDeploy }) => {
         </div>
       </section>
     </header>
-  );
-};
-
-
-
-export const RailwayPopover = () => {
-  const [token, setToken] = useState("");
-  const [isToken, setIsToken] = useState(false);
-
-  return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <Button variant="outline">
-          Deploy on Railway
-          <RailwayLogo className="ml-2 h-4 w-4" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-80">
-        <div className="grid gap-4">
-          <div className="space-y-2">
-            <h4 className="font-medium leading-none">Railway Token</h4>
-            <p className="text-sm text-muted-foreground">
-              {isToken
-                ? "Token saved in state"
-                : "Set your Railway token to deploy your repository."}
-            </p>
-          </div>
-          <div className="grid gap-2">
-            <div className="flex flex-col items-center gap-1">
-              <div className="flex w-full items-center gap-4">
-                {isToken ? (
-                  <>
-                    <Button variant="secondary" onClick={() => setIsToken(false)}>Discard</Button>
-                    <Button className="w-full" onClick={() => createProject(token)}>Deploy</Button>
-                  </>
-                ) : (
-                  <>
-                    <Input
-                      id="token"
-                      value={token}
-                      onChange={(e) => setToken(e.target.value)}
-                      className="h-8 w-full flex-1"
-                    />
-                    <Button onClick={() => setIsToken(true)}>Save</Button>
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      </PopoverContent>
-    </Popover>
   );
 };
 
