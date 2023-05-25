@@ -4,7 +4,7 @@ import Pusher from "pusher-js";
 import { useEffect, useReducer, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { Analytics } from "~/components/application/Analytics";
-import { BuildForm } from "~/components/application/BuildForm";
+import { BuildForm } from "~/components/application/BuildForm/BuildForm";
 import { Counter } from "~/components/application/Counter";
 import { RootLayout } from "~/components/application/RootLayout";
 import { envsReducer } from "~/context/envs/dispatch";
