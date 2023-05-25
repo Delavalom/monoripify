@@ -11,6 +11,7 @@ import { useMutation } from "react-query";
 import { useToast } from "~/hooks/useToast";
 import type { DeployResponse } from "~/pages/api/deploy";
 import { MyRepoContext } from "~/context/repository/context";
+import Link from "next/link";
 
 type Props = {
   showDeploy?: boolean;
@@ -140,8 +141,11 @@ export const Navbar: FC<Props> = ({ showDeploy }) => {
                                   <Button
                                     className="w-full"
                                     onClick={() => {
-                                      if(repository?.full_name) {
-                                        mutate({ token, fullRepoName: repository.full_name })
+                                      if (repository?.full_name) {
+                                        mutate({
+                                          token,
+                                          fullRepoName: repository.full_name,
+                                        });
                                       }
                                     }}
                                   >
@@ -171,9 +175,13 @@ export const Navbar: FC<Props> = ({ showDeploy }) => {
               )}
             </>
           )}
-          <Button variant="outline">
-            View on github
-            <ExternalLink className="ml-2 h-4 w-4 opacity-70 hover:scale-125" />
+          <Button asChild variant="outline">
+            {repository?.html_url && (
+              <Link href={`${repository?.html_url}`} target="_blank">
+                View on github
+                <ExternalLink className="ml-2 h-4 w-4 opacity-70 hover:scale-125" />
+              </Link>
+            )}
           </Button>
           <Button variant="outline" onClick={() => signOut()}>
             <LogOut />
