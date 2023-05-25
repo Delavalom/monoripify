@@ -1,14 +1,12 @@
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/router";
 import {
-  useContext,
   useState,
   type Dispatch,
   type FC,
-  type SetStateAction,
+  type SetStateAction
 } from "react";
 import { type UseMutateFunction } from "react-query";
-import { EnvContext, EnvDispatchContext } from "~/context/envs/dispatchContext";
 import { Button } from "../../ui/Button";
 import {
   Card,
@@ -45,31 +43,6 @@ export const BuildForm: FC<Props> = ({
 }) => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
-  const envVars = useContext(EnvContext);
-  const dispatch = useContext(EnvDispatchContext);
-
-  if (!dispatch) {
-    return <></>;
-  }
-
-  const handleAddEnv = () => {
-    dispatch({ type: "add" });
-  };
-
-  const handleDeleteEnv = (id: string) => {
-    dispatch({ type: "delete", payload: { id } });
-  };
-
-  const handleUpdateEnv = (
-    id: string,
-    name: "key" | "value",
-    value: string
-  ) => {
-    dispatch({
-      type: "update",
-      payload: { id, [name]: value },
-    });
-  };
 
   return (
     <Card className="w-[350px]">
@@ -99,12 +72,7 @@ export const BuildForm: FC<Props> = ({
                 />
               )}
             </div>
-            <BuildList
-              envVars={envVars}
-              handleUpdateEnv={handleUpdateEnv}
-              handleDeleteEnv={handleDeleteEnv}
-              handleAddEnv={handleAddEnv}
-            />
+            <BuildList />
             <div className="flex items-center space-x-2">
               <Checkbox id="terms" className="h-4 w-4" />
               <Label htmlFor="terms" className="text-sm opacity-60">

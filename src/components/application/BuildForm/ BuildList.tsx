@@ -3,15 +3,35 @@ import { type FC } from "react";
 import { Button } from "~/components/ui/Button";
 import { Input } from "~/components/ui/Input";
 import { Label } from "~/components/ui/Label";
+import { useEnvs } from "~/hooks/useEnvs";
 
-type Props = {
-    handleUpdateEnv: (id: string, name: "key" | "value", value: string) => void;
-    handleDeleteEnv: (id: string) => void;
-    handleAddEnv(): void
-    envVars: Required<Schema>["envs"] | null
-};
 
-export const BuildList: FC<Props> = ({handleUpdateEnv, handleDeleteEnv, handleAddEnv, envVars}) => {
+export const BuildList = () => {
+  const { envVars, dispatch } = useEnvs();
+
+  if (!dispatch) {
+    return <></>;
+  }
+
+  const handleAddEnv = () => {
+    dispatch({ type: "add" });
+  };
+
+  const handleDeleteEnv = (id: string) => {
+    dispatch({ type: "delete", payload: { id } });
+  };
+
+  const handleUpdateEnv = (
+    id: string,
+    name: "key" | "value",
+    value: string
+  ) => {
+    dispatch({
+      type: "update",
+      payload: { id, [name]: value },
+    });
+  };
+
   return (
     <div>
       <Label htmlFor="envs">Environment Variables</Label>
@@ -39,47 +59,53 @@ export const BuildList: FC<Props> = ({handleUpdateEnv, handleDeleteEnv, handleAd
   );
 };
 
-
 type EnvVariableItemProps = {
-    env: Required<Schema>["envs"][0];
-    handleUpdateEnv: (id: string, name: "key" | "value", value: string) => void;
-    handleDeleteEnv: (id: string) => void;
-  };
-  
-  const EnvVariableItem: FC<EnvVariableItemProps> = ({
-    env,
-    handleUpdateEnv,
-    handleDeleteEnv,
-  }) => {
-    return (
-      <li className="flex items-center gap-2">
-        <Input
-          name="key"
-          placeholder="KEY..."
-          value={env.key}
-          onChange={(e) => {
-            e.preventDefault();
-            handleUpdateEnv(env.id, e.target.name as "key" | "value", e.target.value);
-          }}
-        />
-        <Input
-          name="value"
-          placeholder="value..."
-          type="password"
-          value={env.value}
-          onChange={(e) => {
-            e.preventDefault();
-            handleUpdateEnv(env.id, e.target.name as "key" | "value", e.target.value);
-          }}
-        />
-        <Trash
-          className="h-8 w-8 cursor-pointer"
-          onClick={(e) => {
-            e.preventDefault();
-            handleDeleteEnv(env.id);
-          }}
-        />
-      </li>
-    );
-  };
-  
+  env: Required<Schema>["envs"][0];
+  handleUpdateEnv: (id: string, name: "key" | "value", value: string) => void;
+  handleDeleteEnv: (id: string) => void;
+};
+
+const EnvVariableItem: FC<EnvVariableItemProps> = ({
+  env,
+  handleUpdateEnv,
+  handleDeleteEnv,
+}) => {
+  return (
+    <li className="flex items-center gap-2">
+      <Input
+        name="key"
+        placeholder="KEY..."
+        value={env.key}
+        onChange={(e) => {
+          e.preventDefault();
+          handleUpdateEnv(
+            env.id,
+            e.target.name as "key" | "value",
+            e.target.value
+          );
+        }}
+      />
+      <Input
+        name="value"
+        placeholder="value..."
+        type="password"
+        value={env.value}
+        onChange={(e) => {
+          e.preventDefault();
+          handleUpdateEnv(
+            env.id,
+            e.target.name as "key" | "value",
+            e.target.value
+          );
+        }}
+      />
+      <Trash
+        className="h-8 w-8 cursor-pointer"
+        onClick={(e) => {
+          e.preventDefault();
+          handleDeleteEnv(env.id);
+        }}
+      />
+    </li>
+  );
+};
