@@ -18,7 +18,7 @@ import {
 } from "../../ui/Card";
 import { Checkbox } from "../../ui/Checkbox";
 import { Label } from "../../ui/Label";
-import { BuildList } from "./ BuildList";
+import { BuildList } from "./BuildList";
 import { RepositoryList } from "./RepositoryList";
 
 type Props = {
