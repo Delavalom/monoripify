@@ -11,6 +11,7 @@ import type { DeployResponse } from "~/pages/api/deploy";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/Popover";
+import { ToastAction } from "../ui/Toast";
 
 type Props = {
   showDeploy?: boolean;
@@ -42,7 +43,17 @@ export const Navbar: FC<Props> = ({ showDeploy }) => {
             }>
         )
         .then((d) => d),
+
     onSuccess(response) {
+      if (!response.deployment) {
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: "There was a problem with your request.",
+          action: <ToastAction altText="Try again">Try again</ToastAction>,
+        });
+        return
+      }
       const id = response.deployment.data.projectCreate.id;
       setProjectId(id);
       toast({

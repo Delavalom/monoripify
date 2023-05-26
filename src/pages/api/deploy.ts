@@ -15,8 +15,6 @@ export default async function handleDeploy(
 ) {
   const body = req.body as { token: string, fullRepoName: string };
 
-  console.log(body);
-
   const response = await fetch("https://backboard.railway.app/graphql/v2", {
     method: "POST",
     headers: {
@@ -30,9 +28,13 @@ export default async function handleDeploy(
     }),
   });
 
-  const data = (await response.json()) as DeployResponse
+  const deployResponse = (await response.json()) as DeployResponse | { message: string, data: null}
 
-  console.log(data);
+  if (!deployResponse.data) {
+    return res.status(400).json({message: deployResponse.message, deployment: null })
+  }
 
-  return res.status(200).json({ message: "success", deployment: data });
+  console.log(deployResponse);
+
+  return res.status(200).json({ message: "success", deployment: deployResponse });
 }
