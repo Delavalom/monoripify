@@ -49,9 +49,12 @@ PUSHER_APP_CLUSTER=
 
 # Railway
 NEXT_PUBLIC_RAILWAY_TOKEN=
+
+# URl
+LOGS_API_URL=
 ```
 
-Setting up the **NEXTAUTH_URL** is crucial since this is the URL that is used by the Github actions to send the logs data. With this variable the Github Action workflow will fail. In a development environment to recieve this logs you should set up a funnel, I use [Ngrok](https://ngrok.com/).
+Setting up the **LOGS_API_URL** is crucial since this is the URL that is used by the Github actions to send the logs data. With this variable the Github Action workflow will fail. In a development environment to recieve this logs you should set up a funnel, I use [Ngrok](https://ngrok.com/).
 
 PS: I'm looking for ways to not rely on third-party services such as *Pusher*. If you have any recommendations for **alternative open source solutions**, I would greatly appreciate your suggestions. Thank you in advance for your input and recommendations.
 

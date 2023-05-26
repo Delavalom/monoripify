@@ -32,6 +32,8 @@ const server = z.object({
   PUSHER_APP_KEY: z.string().min(1),
   PUSHER_APP_SECRET: z.string().min(1),
   PUSHER_APP_CLUSTER: z.string().min(1),
+
+  LOGS_API_URL: z.string().min(1),
 });
 
 /**
@@ -73,6 +75,8 @@ const processEnv = {
   PUSHER_APP_KEY: process.env.PUSHER_APP_KEY,
   PUSHER_APP_SECRET: process.env.PUSHER_APP_SECRET,
   PUSHER_APP_CLUSTER: process.env.PUSHER_APP_CLUSTER,
+
+  LOGS_API_URL: process.env.LOGS_API_URL
 };
 
 // Don't touch the part below

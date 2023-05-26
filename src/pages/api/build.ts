@@ -50,7 +50,7 @@ async function handleInitialBuild(payload: SubmitData, installationId: number) {
       workflow_id: "build.yml",
       ref: "main",
       inputs: {
-        logs_api_url: env.NEXTAUTH_URL,
+        logs_api_url: env.LOGS_API_URL,
         installation_id: installationId.toString(),
         repo_fullname: payload.repoFullname,
         envs,
