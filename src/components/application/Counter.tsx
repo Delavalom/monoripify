@@ -1,21 +1,9 @@
 import { Loader } from "lucide-react";
-import { useEffect, useState, type FC } from "react";
-import { formatCounter } from "~/lib/utils";
+import { type FC } from "react";
+import { useCounter } from "~/hooks/useCounter";
 
 export const Counter: FC = () => {
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    function onCount() {
-      setCount((c) => c + 1);
-    }
-    const id = setInterval(onCount, 1000);
-
-    return () => clearInterval(id);
-  }, [count]);
-
-
-  const counter = formatCounter(count)
+  const counter = useCounter()
 
   return (
     <section className="flex gap-3 flex-col items-center justify-center">
