@@ -10,7 +10,7 @@ export const BuildList = () => {
   const { envVars, dispatch } = useEnvs();
 
   if (!dispatch) {
-    return <></>;
+    return null;
   }
 
   const handleAddEnv = () => {
